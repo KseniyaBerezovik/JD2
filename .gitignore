@@ -3,3 +3,6 @@ store.iml
 database/database.iml
 service/service.iml
 web/web.iml
+database/target/
+service/target/
+web/target/

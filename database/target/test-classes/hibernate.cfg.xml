@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-configuration SYSTEM
-        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
-        <property name="hibernate.connection.driver_class">org.h2.Driver</property>
-        <property name="hibernate.connection.url">jdbc:h2:mem:store</property>
-        <property name="hibernate.connection.username">sa</property>
-        <property name="hibernate.connection.password"/>
-        <property name="hbm2ddl.auto">create-drop</property>
-        <property name="show_sql">true</property>
-        <property name="format_sql">true</property>
+<session-factory>
+<property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
+<property name="hibernate.connection.driver_class">org.h2.Driver</property>
+<property name="hibernate.connection.url">jdbc:h2:mem:store</property>
+<property name="hibernate.connection.username">sa</property>
+<property name="hibernate.connection.password"/>
+<property name="hbm2ddl.auto">create-drop</property>
+<property name="show_sql">true</property>
+<property name="format_sql">true</property>
 
-        <mapping class="by.itacademy.entity.Client"/>
-    </session-factory>
+    <mapping class="by.itacademy.entity.orderEntity.Order"/>
+    <mapping class="by.itacademy.entity.orderEntity.OrderContent"/>
+    <mapping class="by.itacademy.entity.orderEntity.OrderDetail"/>
+
+    <mapping class="by.itacademy.entity.productEntity.Characteristic"/>
+    <mapping class="by.itacademy.entity.productEntity.Product"/>
+
+    <mapping class="by.itacademy.entity.userEntity.Admin"/>
+    <mapping class="by.itacademy.entity.userEntity.Client"/>
+    <mapping class="by.itacademy.entity.userEntity.Employee"/>
+    <mapping class="by.itacademy.entity.userEntity.User"/>
+
+    <mapping class="by.itacademy.entity.Address"/>
+    <mapping class="by.itacademy.entity.BaseEntity"/>
+    <mapping class="by.itacademy.entity.Message"/>
+    <mapping class="by.itacademy.entity.Promotion"/>
+    <mapping class="by.itacademy.entity.Review"/>
+    <mapping class="by.itacademy.entity.Task"/>
+</session-factory>
 </hibernate-configuration>
