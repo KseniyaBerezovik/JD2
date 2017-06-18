@@ -1,6 +1,6 @@
 package by.itacademy.entity.orderEntity;
 
-import by.itacademy.entity.BaseEntity;
+import by.itacademy.entity.otherEntity.BaseEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +24,6 @@ public class OrderDetail extends BaseEntity {
     @Column(name = "closing_date")
     private LocalDateTime closingDate;
 
-    @OneToOne(mappedBy = "detail", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "detail", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Order order;
 }

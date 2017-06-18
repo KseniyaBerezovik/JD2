@@ -1,6 +1,6 @@
 package by.itacademy.entity.userEntity;
 
-import by.itacademy.entity.BaseEntity;
+import by.itacademy.entity.otherEntity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

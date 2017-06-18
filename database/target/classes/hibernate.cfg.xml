@@ -3,7 +3,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/store</property>
         <property name="hibernate.connection.username">root</property>
@@ -16,21 +16,18 @@
         <mapping class="by.itacademy.entity.orderEntity.OrderDetail"/>
 
         <mapping class="by.itacademy.entity.productEntity.Characteristic"/>
-        <mapping class="by.itacademy.entity.productEntity.Criterion"/>
-        <mapping class="by.itacademy.entity.productEntity.ProductType"/>
         <mapping class="by.itacademy.entity.productEntity.Product"/>
+        <mapping class="by.itacademy.entity.productEntity.Category"/>
+        <mapping class="by.itacademy.entity.productEntity.Detail"/>
 
-        <mapping class="by.itacademy.entity.userEntity.Admin"/>
         <mapping class="by.itacademy.entity.userEntity.Client"/>
         <mapping class="by.itacademy.entity.userEntity.Employee"/>
         <mapping class="by.itacademy.entity.userEntity.User"/>
 
-        <mapping class="by.itacademy.entity.Address"/>
-        <mapping class="by.itacademy.entity.BaseEntity"/>
-        <mapping class="by.itacademy.entity.Message"/>
-        <mapping class="by.itacademy.entity.Promotion"/>
-        <mapping class="by.itacademy.entity.Review"/>
-        <mapping class="by.itacademy.entity.Task"/>
+        <mapping class="by.itacademy.entity.otherEntity.Address"/>
+        <mapping class="by.itacademy.entity.otherEntity.BaseEntity"/>
+        <mapping class="by.itacademy.entity.otherEntity.Promotion"/>
+        <mapping class="by.itacademy.entity.otherEntity.Review"/>
 
     </session-factory>
 </hibernate-configuration>
