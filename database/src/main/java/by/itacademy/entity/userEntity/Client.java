@@ -2,8 +2,10 @@ package by.itacademy.entity.userEntity;
 
 import by.itacademy.entity.otherEntity.Address;
 import by.itacademy.entity.otherEntity.Promotion;
-import by.itacademy.entity.orderEntity.Order;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;

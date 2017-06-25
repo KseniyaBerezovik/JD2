@@ -1,17 +1,23 @@
 package by.itacademy.dao;
 
+import by.itacademy.config.TestConfig;
 import by.itacademy.dao.common.BaseDao;
 import by.itacademy.dao.common.BaseDaoTest;
-import by.itacademy.util.DataImporter;
 import by.itacademy.entity.userEntity.Client;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
+
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@Transactional
 public class ClientDaoTest extends BaseDaoTest<Client> {
 
-    private BaseDao<Client> dao = ClientDao.getInstance();
+    @Autowired
+    private ClientDao dao;
 
     @Override
     protected BaseDao<Client> getDao() {
@@ -21,19 +27,5 @@ public class ClientDaoTest extends BaseDaoTest<Client> {
     @Override
     protected Client getModel() {
         return new Client();
-    }
-
-    private SessionFactory SESSION_FACTORY;
-
-    @Before
-    public void init() {
-        SESSION_FACTORY = new Configuration().configure().buildSessionFactory();
-        DataImporter.getInstance().importData(SESSION_FACTORY);
-    }
-
-
-    @After
-    public void destroy() {
-        SESSION_FACTORY.close();
     }
 }

@@ -1,34 +1,41 @@
 package by.itacademy.dao;
 
+import by.itacademy.config.TestConfig;
 import by.itacademy.dao.common.BaseDao;
 import by.itacademy.dao.common.BaseDaoTest;
 import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
-import by.itacademy.util.DataImporter;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@Transactional
 public class ProductDaoTest extends BaseDaoTest<Product> {
 
-    private BaseDao<Product> dao = ProductDao.getInstance();
+    @Autowired
+    private ProductDao productDao;
+
+    @Autowired
+    private DetailDao detailDao;
+
+    @Autowired
+    private CharacteristicDao characteristicDao;
 
     @Override
     protected BaseDao<Product> getDao() {
-        return dao;
+        return productDao;
     }
 
     @Override
@@ -36,50 +43,26 @@ public class ProductDaoTest extends BaseDaoTest<Product> {
         return new Product();
     }
 
-    private SessionFactory SESSION_FACTORY;
-
-    @Before
-    public void init() {
-        SESSION_FACTORY = new Configuration().configure().buildSessionFactory();
-        DataImporter.getInstance().importData(SESSION_FACTORY);
-    }
-
     @Test
     public void testGetByCategoryName() {
-        Session session = SESSION_FACTORY.openSession();
-        Transaction transaction = session.beginTransaction();
-
-        List<Product> products = ProductDao.getInstance()
-                .getByCategoryName(session, "Мобильные телефоны");
+        getDataImporter().importData();
+        List<Product> products = productDao.getByCategoryName("Мобильные телефоны");
 
         assertThat(products, hasSize(1));
         assertThat(products.get(0).getName(), is("Xiaomi Redmi 3"));
-
-        transaction.commit();
-        session.close();
     }
 
     @Test
     public void testGetByCharacteristics() {
-        Session session = SESSION_FACTORY.openSession();
-        Transaction transaction = session.beginTransaction();
+        getDataImporter().importData();
+        Detail detail = detailDao.getByName("Год выпуска");
 
-        Detail detail = DetailDao.getInstance().getByName(session, "Год выпуска");
-
-        List<Characteristic> yearOfIssue = CharacteristicDao.getInstance().getByDetailAndValue(session, detail, "2017");
-        List<Product> products = ProductDao.getInstance().getByCharacteristics(yearOfIssue);
+        List<Characteristic> yearOfIssue = characteristicDao.getByDetailAndValue(detail, "2017");
+        List<Product> products = productDao.getByCharacteristics(yearOfIssue);
 
         List<String> productNames = products.stream().map(p -> p.getName()).collect(toList());
 
         assertThat(products, hasSize(1));
         assertThat(productNames, contains("Xiaomi Redmi 3"));
-
-        transaction.commit();
-        session.close();
-    }
-
-    @After
-    public void destroy() {
-        SESSION_FACTORY.close();
     }
 }

@@ -2,7 +2,9 @@ package by.itacademy.entity.productEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
 import by.itacademy.entity.otherEntity.Review;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;

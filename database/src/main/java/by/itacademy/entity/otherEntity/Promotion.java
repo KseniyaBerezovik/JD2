@@ -1,7 +1,10 @@
 package by.itacademy.entity.otherEntity;
 
 import by.itacademy.entity.userEntity.Client;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

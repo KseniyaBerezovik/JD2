@@ -1,23 +1,27 @@
 package by.itacademy.dao;
 
+import by.itacademy.config.TestConfig;
 import by.itacademy.dao.common.BaseDao;
 import by.itacademy.dao.common.BaseDaoTest;
-import by.itacademy.util.DataImporter;
 import by.itacademy.entity.productEntity.Category;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.transaction.Transactional;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@Transactional
 public class CategoryDaoTest extends BaseDaoTest<Category> {
 
-    private BaseDao<Category> dao = CategoryDao.getInstance();
+    @Autowired
+    private CategoryDao dao;
 
     @Override
     protected BaseDao<Category> getDao() {
@@ -29,29 +33,10 @@ public class CategoryDaoTest extends BaseDaoTest<Category> {
         return new Category();
     }
 
-    private SessionFactory SESSION_FACTORY;
-
-    @Before
-    public void init() {
-        SESSION_FACTORY = new Configuration().configure().buildSessionFactory();
-        DataImporter.getInstance().importData(SESSION_FACTORY);
-    }
-
     @Test
     public void getByName() {
-        Session session = SESSION_FACTORY.openSession();
-        Transaction transaction = session.beginTransaction();
-
-        Category category = CategoryDao.getInstance().getByName(session, "Мобильные телефоны");
-
+        getDataImporter().importData();
+        Category category = dao.getByName("Мобильные телефоны");
         assertThat(category.getName(), is("Мобильные телефоны"));
-
-        transaction.commit();
-        session.close();
-    }
-
-    @After
-    public void destroy() {
-        SESSION_FACTORY.close();
     }
 }
