@@ -1,6 +1,7 @@
 package by.itacademy.entity.orderEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_details")
-@Getter
-@Setter
-@EqualsAndHashCode(exclude = "id")
+@Data
 public class OrderDetail extends BaseEntity {
 
     @Column(name = "date_of_reception")

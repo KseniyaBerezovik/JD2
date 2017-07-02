@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <title>Main title</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+<div sec:authorize="${hasAuthority('USER')}">
+    Пользователь с ролью USER.
+</div>
+<div sec:authorize="${hasAuthority('ADMIN')}">
+    Пользователь с ролью ADMIN.
+</div>
+<p th:text="#{main.page}"></p>
+</body>

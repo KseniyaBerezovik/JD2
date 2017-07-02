@@ -1,23 +1,25 @@
 package by.itacademy.dao;
 
 import by.itacademy.dao.common.BaseDaoImpl;
-import by.itacademy.entity.userEntity.QUser;
 import by.itacademy.entity.userEntity.User;
-import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
-    public User getByLoginAndPassword(String login, String password) {
-        QUser qUser = new QUser("user");
-        JPAQuery<User> query = new JPAQuery<>(getSessionFactory().getCurrentSession());
+    public List<User> getAllClients() {
+        return getSessionFactory().getCurrentSession().createQuery("from User", User.class).getResultList();
+    }
 
-        User user = query.select(qUser)
-                .from(qUser)
-                .where(qUser.login.eq(login).and(qUser.password.eq(password)))
-                .fetchOne();
-        return user;
+    @Override
+    public User getByLogin(String login) {
+        List<User> users = getSessionFactory().getCurrentSession()
+                .createQuery("select u from User u where u.login=:login", User.class)
+                .setParameter("login", login)
+                .getResultList();
+        return users.size() > 0 ? users.get(0) : null;
     }
 }

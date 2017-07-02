@@ -1,20 +1,16 @@
 package by.itacademy.entity.userEntity;
 
+import by.itacademy.entity.otherEntity.Address;
 import by.itacademy.entity.otherEntity.BaseEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
-@Getter
-@Setter
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User extends BaseEntity {
-    @Column(name = "user_name")
+@Data
+public class User extends BaseEntity {
+    @Column(name = "user")
     private String name;
     @Column(name = "surname")
     private String surname;
@@ -22,4 +18,15 @@ public abstract class User extends BaseEntity {
     private String login;
     @Column(name = "password")
     private String password;
+
+    @OneToOne
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
+
+    @Embedded
+    private Address address;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 }

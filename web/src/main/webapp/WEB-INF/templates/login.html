@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Login</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .label-red{
+            color: firebrick;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="btn-group btn-group-justified" role="group">
+        <div class="btn-group" role="group">
+            <div th:with="currentUrl=(${#httpServletRequest.requestURI})">
+                <a th:href="@{?language=ru_RU}">RU</a><br>
+                <a th:href="@{?language=en_US}">EN</a><br>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5 col-lg-offset-3">
+        <form th:action="@{/login}" method="post">
+            <h3 align="CENTER" th:text="#{signIn}">Please sign in</h3>
+            <div th:if="${incorrectData}">
+                <h3 align="CENTER" class="label-red" th:text="#{incorrectLoginOrPassword}">
+                </h3>
+            </div>
+            <div class="form-group">
+                <input class="form-control" th:placeholder="#{login}" name="username" id="username" type="text" required/>
+            </div>
+            <div class="form-group">
+                <input class="form-control" th:placeholder="#{password}" name="password" id="password" type="text" required/>
+            </div>
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-success" th:text="#{enter}"></button>
+                </div>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary" th:href="@{/checkIn}" th:text="#{registration}"></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>

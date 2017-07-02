@@ -2,8 +2,11 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <spring-security.version>4.2.2.RELEASE</spring-security.version>
+    </properties>
 
-  <parent>
+    <parent>
     <groupId>by.itacademy</groupId>
     <artifactId>store</artifactId>
     <version>${project.version}</version>
@@ -27,6 +30,34 @@
       <artifactId>hibernate-jpamodelgen</artifactId>
       <version>5.2.10.Final</version>
     </dependency>
+
+      <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-core</artifactId>
+          <version>${spring-security.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-web</artifactId>
+          <version>${spring-security.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.springframework.security</groupId>
+          <artifactId>spring-security-config</artifactId>
+          <version>${spring-security.version}</version>
+      </dependency>
   </dependencies>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>

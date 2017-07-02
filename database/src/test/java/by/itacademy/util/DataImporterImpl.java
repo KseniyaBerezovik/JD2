@@ -8,14 +8,12 @@ import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
-import by.itacademy.entity.userEntity.Client;
+import by.itacademy.entity.userEntity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Component
@@ -61,7 +59,7 @@ public class DataImporterImpl implements DataImporter {
         saveCharacteristic(session, samsungTv, yearOfIssue, "2016");
         saveCharacteristic(session, samsungTv, country, "Австрия");
 
-        Client client = saveClient(session);
+        User client = saveUser(session);
 
         saveReview(session, client, xiaomi);
         saveOrder(session, client);
@@ -95,7 +93,7 @@ public class DataImporterImpl implements DataImporter {
         return detail;
     }
 
-    private Review saveReview(Session session, Client owner, Product product) {
+    private Review saveReview(Session session, User owner, Product product) {
         Review review = new Review();
         review.setOwner(owner);
         review.setProduct(product);
@@ -105,24 +103,24 @@ public class DataImporterImpl implements DataImporter {
         return review;
     }
 
-    private Client saveClient(Session session) {
-        Client client = new Client();
-        client.setName("Max");
-        client.setSurname("Ivanov");
-        client.setLogin("mivan");
-        client.setPassword("1111");
+    private User saveUser(Session session) {
+        User user = new User();
+        user.setName("Max");
+        user.setSurname("Ivanov");
+        user.setLogin("mivan");
+        user.setPassword("1111");
 
         Address address = new Address();
         address.setCity("Minsk");
 
-        client.setAddress(address);
-        session.save(client);
-        return client;
+        user.setAddress(address);
+        session.save(user);
+        return user;
     }
 
-    private Order saveOrder(Session session, Client client) {
+    private Order saveOrder(Session session, User user) {
         Order order = new Order();
-        order.setOwner(client);
+        order.setOwner(user);
 
         OrderDetail detail = new OrderDetail();
         detail.setDateOfReceipt(LocalDateTime.of(2017, 5, 5, 0, 0));

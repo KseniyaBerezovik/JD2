@@ -1,9 +1,8 @@
 package by.itacademy.entity.orderEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
-import by.itacademy.entity.userEntity.Client;
-import by.itacademy.entity.userEntity.Employee;
-import lombok.Data;
+import by.itacademy.entity.userEntity.User;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,11 +14,7 @@ import java.util.Set;
 public class Order extends BaseEntity {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner_id")
-    private Client owner;
-
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    private User owner;
 
     @Column(name = "status")
     private OrderStatus status;

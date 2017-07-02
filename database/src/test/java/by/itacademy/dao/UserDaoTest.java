@@ -3,7 +3,6 @@ package by.itacademy.dao;
 import by.itacademy.config.TestConfig;
 import by.itacademy.dao.common.BaseDao;
 import by.itacademy.dao.common.BaseDaoTest;
-import by.itacademy.entity.userEntity.Client;
 import by.itacademy.entity.userEntity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,14 +29,6 @@ public class UserDaoTest extends BaseDaoTest<User> {
 
     @Override
     protected User getModel() {
-        return new Client();
-    }
-
-    @Test
-    public void testGetByLoginAndPassword() {
-        getDataImporter().importData();
-        User user = dao.getByLoginAndPassword("mivan", "1111");
-
-        assertNotNull(user);
+        return new User();
     }
 }

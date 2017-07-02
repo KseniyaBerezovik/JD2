@@ -2,9 +2,7 @@ package by.itacademy.entity.productEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
 import by.itacademy.entity.otherEntity.Review;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,9 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class Product extends BaseEntity {
     @Column(name = "name")
     private String name;

@@ -3,9 +3,9 @@ package by.itacademy.dao;
 import by.itacademy.config.TestConfig;
 import by.itacademy.dao.common.BaseDao;
 import by.itacademy.dao.common.BaseDaoTest;
-import by.itacademy.entity.userEntity.Client;
 import by.itacademy.entity.orderEntity.Order;
 
+import by.itacademy.entity.userEntity.User;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,16 +39,6 @@ public class OrderDaoTest extends BaseDaoTest<Order> {
     @Override
     protected Order getModel() {
         return new Order();
-    }
-
-    @Test
-    public void testGetByClient() {
-        getDataImporter().importData();
-        Client client = (Client) userDao.getByLoginAndPassword("mivan", "1111");
-        List<Order> orders = orderDao.getByClient(client);
-
-        assertThat(orders, hasSize(1));
-        Assert.assertEquals(orders.get(0).getOwner(), client);
     }
 
     @Test

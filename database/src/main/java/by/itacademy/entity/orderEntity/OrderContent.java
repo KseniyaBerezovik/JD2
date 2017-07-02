@@ -2,19 +2,13 @@ package by.itacademy.entity.orderEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
 import by.itacademy.entity.productEntity.Product;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "order_content")
-@NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(exclude = "id")
+@Data
 public class OrderContent extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)

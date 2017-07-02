@@ -1,10 +1,7 @@
 package by.itacademy.entity.otherEntity;
 
-import by.itacademy.entity.userEntity.Client;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import by.itacademy.entity.userEntity.User;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,10 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "promotions")
-@Getter
-@Setter
-@NoArgsConstructor
-@EqualsAndHashCode(exclude = "id")
+@Data
 public class Promotion extends BaseEntity {
     @Column(name = "date_of_creation")
     private LocalDateTime dateOfCreation;
@@ -24,12 +18,15 @@ public class Promotion extends BaseEntity {
     @Column(name = "closing_date")
     private LocalDateTime closingDate;
 
-    @Column(name = "content")
-    private String content;
+    @Column(name = "sale")
+    private Integer sale;
 
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "promotions", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Client> clients = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "promotions_users",
+            joinColumns = @JoinColumn(name = "promotion_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> clients = new HashSet<>();
 }
