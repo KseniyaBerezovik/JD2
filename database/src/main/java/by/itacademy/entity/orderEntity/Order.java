@@ -2,7 +2,7 @@ package by.itacademy.entity.orderEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
 import by.itacademy.entity.userEntity.User;
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;

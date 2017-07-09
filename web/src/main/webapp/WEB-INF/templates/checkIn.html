@@ -10,11 +10,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <style>
-        .label-red{
-            color: firebrick;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
 </head>
 <body>
 <div class="container">
@@ -40,7 +36,7 @@
             </div>
             <div class="form-group">
                 <label th:text="#{password}" th:for="password"></label>
-                <input class="form-control" placeholder="#{password}" th:field="*{password}" type="text" required/>
+                <input class="form-control" th:placeholder="#{password}" th:field="*{password}" type="text" required/>
             </div>
             <div class="btn-group btn-group-justified" role="group">
                 <div class="btn-group" role="group">

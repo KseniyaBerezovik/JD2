@@ -5,18 +5,215 @@
 <head>
     <meta charset="utf-8">
     <title>Main title</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
-    <script src="bootstrap/js/bootstrap.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
 </head>
-<body>
-<div sec:authorize="${hasAuthority('USER')}">
-    Пользователь с ролью USER.
+<body class="lightRed">
+<div th:insert="~{navbar :: header}"></div>
+<div class="myContent">
+    <div class="productContent">
+
+        <nav class="navbar navbar-default">
+            <div class="navContainer">
+                <div class="navbar-form navbar-left navCategories" th:each="category : ${categories}">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" th:href="@{'/category/' + ${category.name}}"
+                           th:text="${category.name}">Мобильные телефоны</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!--<div sec:authorize="${hasAuthority('USER')}">-->
+        <!--Пользователь с ролью USER.-->
+        <!--</div>-->
+        <!--<div sec:authorize="${hasAuthority('ADMIN')}">-->
+        <!--Пользователь с ролью ADMIN.-->
+        <!--</div>-->
+        <!--<p th:text="#{main.page}"></p>-->
+        <div th:if="${categoryName}">
+
+            <div class="container-fluid">
+                <div class="col-lg-3 bs-col">
+                    <div class="col-lg-10">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                Год выпуска
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">2017</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">2016</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">2015</label>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-lg-6">
+                                            <select class="form-control">
+                                                <option disabled selected value>От</option>
+                                                <option>2014</option>
+                                                <option>2013</option>
+                                                <option>2012</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <select class="form-control">
+                                                <option disabled selected value>До</option>
+                                                <option>2014</option>
+                                                <option>2013</option>
+                                                <option>2012</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                Производитель
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Apple</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Samsung</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Xiaomi</label>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-lg-9">
+                                            <select class="form-control">
+                                                <option disabled selected value>Ещё варианты</option>
+                                                <option>Sony</option>
+                                                <option>Lenovo</option>
+                                                <option>HTC</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                Цена
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="От">
+                                        </div><!-- /input-group -->
+                                    </div><!-- /.col-lg-6 -->
+                                    <div class="col-lg-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="До">
+                                        </div><!-- /input-group -->
+                                    </div><!-- /.col-lg-6 -->
+                                </div><!-- /.row -->
+
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                Операционная система
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Android</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Windows phone</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Apple iOS</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="page-header">
+                            <h2 align="CENTER" th:text="${categoryName}"></h2>
+                        </div>
+                    </div>
+                    <div th:each="product : ${products}">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <a th:href="@{'/product_info/' + ${product.id}}" th:text="${product.name}"></a>
+                                    </div>
+                                    <div class="col-lg-1 col-lg-offset-7">
+                                        <b th:text="${product.price + '$'}"></b>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <img th:src="@{'/resources/images/' + ${product.image}}" class="img-rounded"
+                                             alt="..."
+                                             style="height: 175px; width: 87px; display: block; margin-right: auto; margin-left: auto">
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <p th:text="${product.description}">
+                                            Android, экран 5" IPS (720x1280), ОЗУ 2 ГБ, флэш-память 16 ГБ, карты памяти,
+                                            камера
+                                            13
+                                            Мп,
+                                            аккумулятор 4100 мАч, 2 SIM, цвет черный
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-1 col-lg-offset-9">
+                                        <a href="#" class="btn btn-sm  btn-info">
+                                            <span class="glyphicon glyphicon-star"></span> Отзывы
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <a href="#" class="btn btn-sm btn-warning">
+                                            <span class="glyphicon glyphicon-shopping-cart"></span> Добавить в корзину
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <nav aria-label="Page navigation" style="text-align: center;">
+                            <ul class="pagination" style="display: inline-block; float: none;">
+                                <li>
+                                    <a href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li><a th:href="@{/main_page/1}">1</a></li>
+                                <li><a th:href="@{/main_page/2}">2</a></li>
+                                <li><a th:href="@{/main_page/3}">3</a></li>
+                                <li><a th:href="@{/main_page/4}">4</a></li>
+                                <li><a th:href="@{/main_page/5}">5</a></li>
+                                <li>
+                                    <a href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div sec:authorize="${hasAuthority('ADMIN')}">
-    Пользователь с ролью ADMIN.
-</div>
-<p th:text="#{main.page}"></p>
 </body>

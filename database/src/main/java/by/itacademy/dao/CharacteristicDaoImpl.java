@@ -3,12 +3,9 @@ package by.itacademy.dao;
 import by.itacademy.dao.common.BaseDaoImpl;
 import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Detail;
-import by.itacademy.entity.productEntity.QCharacteristic;
-import com.querydsl.jpa.impl.JPAQuery;
+import by.itacademy.entity.productEntity.Product;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 @Repository
@@ -16,30 +13,33 @@ public class CharacteristicDaoImpl extends BaseDaoImpl<Characteristic> implement
 
     @Override
     public List<Characteristic> getByDetailAndValue(Detail detail, String value) {
-        QCharacteristic characteristic = new QCharacteristic("characteristic");
-        JPAQuery<Characteristic> query = new JPAQuery<>(getSessionFactory().getCurrentSession());
-
-        List<Characteristic> characteristics = query.select(characteristic)
-                .from(characteristic)
-                .where(characteristic.detail.eq(detail)
-                        .and(characteristic.value.eq(value)))
-                .fetchResults()
-                .getResults();
-
+        List<Characteristic> characteristics = getSessionFactory().getCurrentSession()
+                .createQuery("select c from Characteristic c where c.detail.name=:name and c.value=:value", Characteristic.class)
+                .setParameter("name", detail.getName())
+                .setParameter("value", value)
+                .getResultList();
         return characteristics;
+
     }
 
     @Override
     public List<Characteristic> getByDetailAndIntervalValues(Detail detail, String from, String to) {
-        QCharacteristic characteristic = new QCharacteristic("characteristic");
-        JPAQuery<Characteristic> query = new JPAQuery<>(getSessionFactory().getCurrentSession());
+        List<Characteristic> characteristics = getSessionFactory().getCurrentSession()
+                .createQuery("select c from Characteristic c where c.detail.name=:name and " +
+                        "c.value >= :from and c.value <= :to", Characteristic.class)
+                .setParameter("name", detail.getName())
+                .setParameter("from", from)
+                .setParameter("to", to)
+                .getResultList();
+        return characteristics;
+    }
 
-        List<Characteristic> characteristics = query.select(characteristic)
-                .from(characteristic)
-                .where(characteristic.detail.eq(detail)
-                        .and(characteristic.value.between(from, to)))
-                .fetchResults()
-                .getResults();
+    @Override
+    public List<Characteristic> getByProduct(Product product) {
+        List<Characteristic> characteristics = getSessionFactory().getCurrentSession()
+                .createQuery("select c from Characteristic c where c.product.id=:id", Characteristic.class)
+                .setParameter("id", product.getId())
+                .getResultList();
         return characteristics;
     }
 }

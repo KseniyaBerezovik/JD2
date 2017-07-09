@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <title>Main title</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
+    <script src="/resources/js/category.js"></script>
+</head>
+<body class="lightRed">
+<div th:insert="~{navbar :: header}"></div>
+<div class="myContent">
+    <div class="productContent">
+
+        <nav class="navbar navbar-default">
+            <div class="navContainer">
+                <div class="navbar-header">
+                    <div class="navbar-brand">Добавление продукта</div>
+                    <div class="navbar-brand">Шаг 1: Описание</div>
+                    <div class="navbar-brand">Шаг 2: Характеристики</div>
+                </div>
+            </div>
+        </nav>
+
+        <div th:if="${category != null}">
+            <div class="container">
+                <div class="col-lg-5 col-lg-offset-3">
+                    <h3>Выберите категорию</h3>
+                    <form th:action="@{/admin/addProduct}" method="post" th:object="${category}">
+                        <div class="form-group">
+                            <select th:field="*{id}" class="form-control">
+                                <option th:each="category : ${categories}" th:value="${category.id}"
+                                        th:text="${category.name}"></option>
+                            </select>
+                        </div>
+                        <button type="submit">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${details}">
+            <div th:each="detail : ${details}">
+                <label th:text="${detail.name}"
+                       th:for="detailValue">
+                </label>
+
+                <input class="myDetail" type="text" th:name="${detail.name}" th:id="detailValue">
+            </div>
+            <button type="button" onclick="getDetail()">Сохранить</button>
+        </div>
+    </div>
+</div>
+</body>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <title>Main title</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
+</head>
+<body class="lightRed">
+<div th:insert="~{navbar :: header}"></div>
+<div class="myContent">
+    <div class="productContent">
+
+        <nav class="navbar navbar-default">
+            <div class="navContainer">
+                <div class="navbar-form navbar-left navCategories" th:each="category : ${categories}">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" th:href="@{'/category/' + ${category.name}}"
+                           th:text="${category.name}">Мобильные телефоны</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div th:object="${product}">
+    <p th:text="${product.name}"></p>
+    <p th:text="${product.description}"></p>
+    <p th:text="${product.mark}"></p>
+    <p th:text="${product.price}"></p>
+    <br>
+    <div th:each="chracteristic : ${characteristics}">
+        <p th:text="${chracteristic.detail.name} + ': ' + ${chracteristic.value}"></p>
+    </div>
+    <br>
+    <div th:each="review : ${reviews}">
+        <p th:text="${review.owner.name} + ' ' + ${review.owner.surname}"></p>
+        <p th:text="${review.content}"></p>
+    </div>
+</div>
+<form th:action="@{'/product/' + ${product.id}}" method="post">
+    <div class="form-group">
+        <input class="form-control" placeholder="Ваш отзыв" name="content" id="content" type="text" required/>
+    </div>
+    <div class="btn-group btn-group-justified" role="group">
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-success" text="Сохранить"></button>
+            </div>
+        </div>
+    </div>
+</form>
+    </div>
+</div>
+
+</body>

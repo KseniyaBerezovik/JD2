@@ -2,7 +2,7 @@ package by.itacademy.entity.userEntity;
 
 import by.itacademy.entity.otherEntity.Address;
 import by.itacademy.entity.otherEntity.BaseEntity;
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 

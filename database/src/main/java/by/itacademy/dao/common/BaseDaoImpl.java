@@ -3,7 +3,6 @@ package by.itacademy.dao.common;
 import by.itacademy.entity.otherEntity.BaseEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
 
@@ -46,7 +45,6 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     @Override
     public void update(T entity) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(entity);
         session.update(entity);
     }
 

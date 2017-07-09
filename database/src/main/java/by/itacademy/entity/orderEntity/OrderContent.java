@@ -2,7 +2,7 @@ package by.itacademy.entity.orderEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
 import by.itacademy.entity.productEntity.Product;
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 

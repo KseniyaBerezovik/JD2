@@ -1,13 +1,17 @@
 package by.itacademy.entity.productEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "characteristics")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Characteristic extends BaseEntity {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "product_id")

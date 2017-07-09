@@ -2,7 +2,7 @@ package by.itacademy.entity.otherEntity;
 
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.entity.userEntity.User;
-import lombok.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <title>Main title</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
+    <script src="/resources/js/category.js"></script>
+</head>
+<body class="lightRed">
+<div th:insert="~{navbar :: header}"></div>
+<div class="myContent">
+    <div class="productContent">
+
+        <nav class="navbar navbar-default">
+            <div class="navContainer">
+                <div class="navbar-header">
+                    <div class="navbar-brand">Добавление продукта</div>
+                    <div class="navbar-brand">Шаг 1: Описание</div>
+                    <div class="navbar-brand">Шаг 2: Характеристики</div>
+                    <div class="navbar-brand">Шаг 3: Изображение</div>
+                </div>
+            </div>
+        </nav>
+
+        <form method="POST" th:action="@{/addimg}" enctype="multipart/form-data">
+            <input type="file" name="file" /><br/>
+            <input type="submit" value="Submit" />
+        </form>
+
+    </div>
+</div>
+</body>

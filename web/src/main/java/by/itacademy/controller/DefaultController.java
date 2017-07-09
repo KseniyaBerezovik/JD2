@@ -15,9 +15,4 @@ public class DefaultController {
     public String cart() {
         return "cart";
     }
-
-    @GetMapping("/main_page")
-    public String mainPage() {
-        return "main_page";
-    }
 }
