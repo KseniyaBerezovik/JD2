@@ -18,16 +18,18 @@
 <div class="myContent">
     <div class="productContent">
 
-        <nav class="navbar navbar-default">
-            <div class="navContainer">
-                <div class="navbar-form navbar-left navCategories" th:each="category : ${categories}">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" th:href="@{'/category/' + ${category.name}}"
-                           th:text="${category.name}">Мобильные телефоны</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <!--<nav class="navbar navbar-default">-->
+            <!--<div class="navContainer">-->
+                <!--<div class="navbar-form navbar-left navCategories" th:each="category : ${categories}">-->
+                    <!--<div class="navbar-header">-->
+                        <!--<a class="navbar-brand" th:href="@{'/category/' + ${category.name}}"-->
+                           <!--th:text="${category.name}">Мобильные телефоны</a>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</nav>-->
+
+        <div th:insert="~{navbar :: navbar-default}"></div>
 
         <div th:object="${product}">
     <p th:text="${product.name}"></p>

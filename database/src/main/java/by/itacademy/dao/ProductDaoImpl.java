@@ -1,6 +1,7 @@
 package by.itacademy.dao;
 
 import by.itacademy.dao.common.BaseDaoImpl;
+import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Product;
 import org.springframework.stereotype.Repository;
@@ -26,11 +27,11 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
     }
 
     @Override
-    public List<Product> getByNumberPageAndCount(Integer numberPage, Integer numberOfProductInPage) {
-        int start = numberPage * numberOfProductInPage;
+    public List<Product> getByNumberPageAndCount(Integer numberPage, Integer numberOfProductInPage, Category category) {
         List<Product> products = getSessionFactory().getCurrentSession()
-                .createQuery("select p from Product p", Product.class)
-                .setFirstResult(start)
+                .createQuery("select p from Product p where p.category.id=:id order by p.id asc", Product.class)
+                .setParameter("id", category.getId())
+                .setFirstResult(numberOfProductInPage * ((numberPage - 1) + 1))
                 .setMaxResults(numberOfProductInPage)
                 .getResultList();
         return products;
@@ -43,10 +44,16 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
                 .setMaxResults(1)
                 .getSingleResult();
         String image = product.getImage();
-        System.out.println("КАРТИНКА: " + image);
         String[] split = image.split("\\.");
-        System.out.println("РАЗМЕР: " + split.length);
-        System.out.println("ПЕРВЫЙ ЭЛЕМЕНТ: " + split[0]);
         return Integer.valueOf(split[0]) + 1;
+    }
+
+    @Override
+    public Integer getCountOfProducts(Category category) {
+        Long count = getSessionFactory().getCurrentSession()
+                .createQuery("select count(*) from Product as p where p.category.id=:id", Long.class)
+                .setParameter("id", category.getId())
+                .getSingleResult();
+        return Math.toIntExact(count);
     }
 }

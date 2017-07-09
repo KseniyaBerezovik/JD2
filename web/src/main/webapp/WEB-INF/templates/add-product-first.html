@@ -5,11 +5,8 @@
 <head>
     <meta charset="utf-8">
     <title>Main title</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" th:href="@{/resources/css/style.css}">
     <script src="/resources/js/category.js"></script>
@@ -30,7 +27,7 @@
 
         <div class="container">
             <div class="col-lg-5 col-lg-offset-3">
-                <form th:action="@{/admin/addProduct/first}"
+                <form th:action="@{/admin/add-product/first}"
                       th:object="${product}"
                       method="post"
                       enctype="multipart/form-data">
@@ -54,7 +51,6 @@
                 </form>
             </div>
         </div>
-
     </div>
 </div>
 </body>

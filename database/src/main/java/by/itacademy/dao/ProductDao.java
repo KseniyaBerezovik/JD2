@@ -1,6 +1,7 @@
 package by.itacademy.dao;
 
 import by.itacademy.dao.common.BaseDao;
+import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Product;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public interface ProductDao extends BaseDao<Product> {
     List<Product> getByCategoryName(String categoryName);
     List<Product> getByCharacteristics(List<Characteristic> characteristics);
-    List<Product> getByNumberPageAndCount(Integer numberPage, Integer numberOfProductInPage);
+    List<Product> getByNumberPageAndCount(Integer numberPage, Integer numberOfProductInPage, Category category);
     Integer getNextImageNumber();
+    Integer getCountOfProducts(Category category);
 }

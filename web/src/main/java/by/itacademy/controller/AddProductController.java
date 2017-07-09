@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
+@RequestMapping(path = "/admin/add-product")
 public class AddProductController {
 
     private CategoryService categoryService;
@@ -65,19 +66,19 @@ public class AddProductController {
         model.addAttribute("categories", categoryService.findAll());
     }
 
-    @GetMapping("/admin/addProduct/first")
+    @GetMapping("/first")
     public String addProductFirst(Model model) {
         model.addAttribute("product", new Product());
         return "add-product-first";
     }
 
-    @PostMapping("/admin/addProduct/first")
+    @PostMapping("/first")
     public String addProductPost(Product product, HttpSession session) {
         session.setAttribute("resultProduct", product);
-        return "redirect:/admin/addProduct";
+        return "redirect:/admin/add-product/second";
     }
 
-    @GetMapping("/admin/addProduct")
+    @GetMapping("/second")
     public String addProduct(Model model, HttpSession session) {
         Product resultProduct = (Product) session.getAttribute("resultProduct");
         if(resultProduct.getCategory() != null) {
@@ -85,10 +86,10 @@ public class AddProductController {
             model.addAttribute("details", category.getDetails());
             model.addAttribute("detailDto", new DetailDto());
         }
-        return "add-product";
+        return "add-product-second";
     }
 
-    @PostMapping("/admin/addProduct")
+    @PostMapping("/second")
     public String addCategory(Category category, Model model, HttpSession session) {
         Category resultCategory = categoryService.getByID(category.getId());
         Product resultProduct = (Product) session.getAttribute("resultProduct");
@@ -97,10 +98,10 @@ public class AddProductController {
         productService.save(resultProduct);
         List<Detail> details = resultCategory.getDetails();
         model.addAttribute("details", details);
-        return "redirect:/admin/addProduct";
+        return "redirect:/admin/add-product/second";
     }
 
-    @PostMapping("/admin/addDetails")
+    @PostMapping("/add-details")
     @ResponseBody
     public void addDetails(@RequestBody DetailDto detailDto, HttpSession session) {
         Product resultProduct = (Product) session.getAttribute("resultProduct");
@@ -110,51 +111,33 @@ public class AddProductController {
         characteristicService.save(characteristic);
     }
 
-    @GetMapping("/addimg")
+    @GetMapping("/third")
     public String index() {
         productService.getNextImageNumber();
-        return "addimg";
+        return "add-product-third";
     }
 
-    @PostMapping("/addimg")
-    public String singleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes, HttpSession session) {
+    @PostMapping("/third")
+    public String singleFileUpload(@RequestParam("file") MultipartFile file, HttpSession session) {
 
-        String webappRoot = servletContext.getRealPath("/");
-        String relativeFolder = File.separator + "resources" + File.separator
-                + "images" + File.separator;
+        String rootPath = servletContext.getRealPath("/");
+        String relativePath = File.separator + "resources" + File.separator + "images" + File.separator;
 
-        String fileName =
-                String.valueOf(productService.getNextImageNumber())
-                        + "."
+        String fileName = String.valueOf(productService.getNextImageNumber()) + "."
                         + file.getOriginalFilename().split("\\.")[1];
 
-        String resultPath = webappRoot + relativeFolder
-                + fileName;
-
-        if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-            return "redirect:uploadStatus";
-        }
+        String resultPath = rootPath + relativePath + fileName;
 
         try {
-
             byte[] bytes = file.getBytes();
             Path path = Paths.get(resultPath);
-            System.out.println(resultPath);
             Files.write(path, bytes);
-
-            redirectAttributes.addFlashAttribute("message",
-                    "You successfully uploaded '" + file.getOriginalFilename() + "'");
-
             Product resultProduct = (Product) session.getAttribute("resultProduct");
             resultProduct.setImage(fileName);
             productService.update(resultProduct);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return "redirect:/main_page";
     }
 }

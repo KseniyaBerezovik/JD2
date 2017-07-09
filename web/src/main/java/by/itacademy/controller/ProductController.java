@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.net.FileNameMap;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class ProductController {
+
+    private final static int PRODUCT_IN_PAGE = 3;
 
     @Autowired
     private ProductService productService;
@@ -39,25 +43,30 @@ public class ProductController {
     }
 
     @GetMapping("/main_page")
-    public String mainPage(Model model) {
-        List<Product> products = productService.getByNumberPageAndCount(1, 2);
+    public String defaultMainPage() {
+        return "main_page";
+    }
+
+    @GetMapping("/main_page/{page}/{category_id}")
+    public String mainPage(@PathVariable(value = "page") Integer page,
+                           @PathVariable(value = "category_id") Long category_id,
+                           Model model) {
+        Category category = categoryService.getByID(category_id);
+        List<Product> products = productService.getByNumberPageAndCount(page, category);
+        model.addAttribute("pages", productService.getPages(category));
+        model.addAttribute("category", category);
         model.addAttribute("products", products);
         return "main_page";
     }
 
-    @GetMapping("/main_page/{page}")
-    public String mainPage(@PathVariable(value = "page") Integer page, Model model) {
-        List<Product> products = productService.getByNumberPageAndCount(page, 2);
-        model.addAttribute("products", products);
-        return "main_page";
-    }
-
-    @GetMapping("/category/{name}")
-    public String getProductsInCategory(@PathVariable("name") String name,
+    @GetMapping("/category/{id}")
+    public String getProductsInCategory(@PathVariable("id") Long id,
                                         Model model) {
-        model.addAttribute("categoryName", name);
-        List<Product> products = productService.getByCategoryName(name);
+        Category category = categoryService.getByID(id);
+        model.addAttribute("category", category);
+        List<Product> products = productService.getByNumberPageAndCount(0, category);
         model.addAttribute("products", products);
+        model.addAttribute("pages", productService.getPages(category));
         return "main_page";
     }
 
