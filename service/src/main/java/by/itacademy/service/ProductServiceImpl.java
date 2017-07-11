@@ -41,7 +41,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         int pageCount = (int) Math.ceil((double) products / PRODUCT_IN_PAGE);
         List<Integer> pages = new ArrayList<>();
         for(int i = 0; i < pageCount; i++) {
-            pages.add(i);
+            pages.add(i + 1);
         }
         return pages;
     }

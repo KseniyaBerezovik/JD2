@@ -52,7 +52,7 @@ public class ProductController {
                            @PathVariable(value = "category_id") Long category_id,
                            Model model) {
         Category category = categoryService.getByID(category_id);
-        List<Product> products = productService.getByNumberPageAndCount(page, category);
+        List<Product> products = productService.getByNumberPageAndCount(page - 1, category);
         model.addAttribute("pages", productService.getPages(category));
         model.addAttribute("category", category);
         model.addAttribute("products", products);

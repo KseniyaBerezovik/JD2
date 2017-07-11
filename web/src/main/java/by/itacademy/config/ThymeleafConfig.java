@@ -40,6 +40,14 @@ public class ThymeleafConfig {
         return resolver;
     }
 
+    @Bean
+    public SpringTemplateEngine templateEngine(SpringResourceTemplateResolver templateResolver) {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+        templateEngine.addDialect(new SpringSecurityDialect());
+        return templateEngine;
+    }
+
     private Set<IDialect> additionalDialects() {
         Set<IDialect> dialects = new HashSet<IDialect>();
         dialects.add(new SpringSecurityDialect());

@@ -130,7 +130,7 @@
                 <div class="col-lg-9">
                     <div class="row">
                         <div class="page-header">
-                            <h2 align="CENTER" th:text="${category.name}"></h2>
+                            <h4 align="CENTER" th:text="${category.name}"></h4>
                         </div>
                     </div>
                     <div th:each="product : ${products}">
@@ -151,13 +151,7 @@
                                              style="height: 175px; width: 87px; display: block; margin-right: auto; margin-left: auto">
                                     </div>
                                     <div class="col-lg-9">
-                                        <p th:text="${product.description}">
-                                            Android, экран 5" IPS (720x1280), ОЗУ 2 ГБ, флэш-память 16 ГБ, карты памяти,
-                                            камера
-                                            13
-                                            Мп,
-                                            аккумулятор 4100 мАч, 2 SIM, цвет черный
-                                        </p>
+                                        <p th:text="${product.description}"></p>
                                     </div>
                                 </div>
 
