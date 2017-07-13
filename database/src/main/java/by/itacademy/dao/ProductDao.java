@@ -14,4 +14,5 @@ public interface ProductDao extends BaseDao<Product> {
     List<Product> getByNumberPageAndCount(Integer numberPage, Integer numberOfProductInPage, Category category);
     Integer getNextImageNumber();
     Integer getCountOfProducts(Category category);
+    List<Product> getByIntervalPrice(Integer priceFrom, String priceTo);
 }

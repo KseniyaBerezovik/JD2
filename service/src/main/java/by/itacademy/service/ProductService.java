@@ -6,6 +6,7 @@ import by.itacademy.entity.productEntity.Product;
 import by.itacademy.service.common.BaseService;
 
 import java.util.List;
+import java.util.Set;
 
 
 public interface ProductService  extends BaseService<Product> {
@@ -14,4 +15,6 @@ public interface ProductService  extends BaseService<Product> {
     Integer getNextImageNumber();
     List<Integer> getPages(Category category);
     List<Product> getByCharacteristics(List<Characteristic> characteristics);
+    Set<Product> getProductsByYears(List<Integer> years, Integer yearFrom, Integer yearTo);
+    Set<Product> getProductsByPrice(Integer priceFrom, String priceTo);
 }

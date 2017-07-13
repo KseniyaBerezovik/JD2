@@ -2,6 +2,7 @@ package by.itacademy.entity.productEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "categories")
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Category extends BaseEntity {
 
     @Column(name = "name")

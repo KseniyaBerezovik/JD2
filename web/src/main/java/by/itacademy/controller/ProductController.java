@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.net.FileNameMap;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -43,9 +42,6 @@ public class ProductController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private DetailService detailService;
-
     @ModelAttribute("categories")
     public List<Category> addCategories() {
         return categoryService.findAll();
@@ -63,54 +59,47 @@ public class ProductController {
         return "main_page";
     }
 
-    @GetMapping("/main_page/{page}/{category_id}")
-    public String mainPage(@PathVariable(value = "page") Integer page,
-                           @PathVariable(value = "category_id") Long category_id,
-                           Model model) {
-        Category category = categoryService.getByID(category_id);
-        List<Product> products = productService.getByNumberPageAndCount(page - 1, category);
-        model.addAttribute("pages", productService.getPages(category));
-        model.addAttribute("category", category);
-        model.addAttribute("products", products);
-        return "main_page";
-    }
-
     @GetMapping("/category/{id}")
     public String getProductsInCategory(@PathVariable("id") Long id,
                                         @RequestParam(value = "year", required = false) List<Integer> years,
                                         @RequestParam(value = "yearFrom", required = false, defaultValue = "0") Integer yearFrom,
                                         @RequestParam(value = "yearTo", required = false, defaultValue = "3000") Integer yearTo,
+                                        @RequestParam(value = "priceFrom", required = false, defaultValue = "0") Integer priceFrom,
+                                        @RequestParam(value = "priceTo", required = false, defaultValue = "undefined") String priceTo,
                                         Model model) {
-        List<Product> products = new ArrayList<>();
+        Category category = categoryService.getByID(id);
+        model.addAttribute("category", category);
+        List<Detail> details = category.getDetails();
+        model.addAttribute("details", details);
+        Set<Product> products = new HashSet<>();
 
-        if(yearFrom != null && yearTo != null) {
-            Detail yearDetail = detailService.getByID(1L);
-            List<Characteristic> characteristics = characteristicService.getByDetailAndIntervalValues(yearDetail, String.valueOf(yearFrom), String.valueOf(yearTo));
-            System.out.println("CHARACTERISTICS: " + characteristics.size());
-            characteristics.forEach(System.out::println);
-            List<Product> productsInIntervalValue = characteristics.stream().map(ch -> ch.getProduct()).collect(Collectors.toList());
-            products.addAll(productsInIntervalValue);
-        }
+        boolean yearParamsUndefined = years == null &&
+                                      yearFrom == 0 &&
+                                      yearTo == 3000;
+        boolean priceParamsUndefined = priceFrom == 0 &&
+                                       priceTo.equals("undefined");
 
-        if(years != null) {
-            for(Integer year : years) {
-                Detail yearDetail = detailService.getByID(1L);
-                List<Characteristic> characteristics = characteristicService.getByDetailAndValue(yearDetail, String.valueOf(year));
-                List<Product> productsInValue = characteristics.stream().map(ch -> ch.getProduct()).collect(Collectors.toList());
-                products.addAll(productsInValue);
+        if(yearParamsUndefined && priceParamsUndefined) {
+            products.addAll(productService.getByCategoryName(category.getName()));
+        } else {
+            if(!yearParamsUndefined && !priceParamsUndefined){
+                Set<Product> productsToAddByYear = productService.getProductsByYears(years, yearFrom, yearTo);
+                Set<Product> productsToAddByPrice = productService.getProductsByPrice(priceFrom, priceTo);
+                products = productsToAddByYear.stream().filter(productsToAddByPrice::contains).collect(Collectors.toSet());
+            } else {
+                if(!yearParamsUndefined) {
+                    products = productService.getProductsByYears(years, yearFrom, yearTo);
+                }
+                if(!priceParamsUndefined) {
+                    products = productService.getProductsByPrice(priceFrom, priceTo);
+                }
             }
         }
 
-        Category category = categoryService.getByID(id);
-        model.addAttribute("category", category);
-//        products.addAll(productService.getByNumberPageAndCount(0, category));
         model.addAttribute("products", products);
-        List<Integer> pages = productService.getPages(category);
-        model.addAttribute("pages", pages);
-        List<Detail> details = category.getDetails();
-        model.addAttribute("details", details);
         return "main_page";
     }
+
 
     @GetMapping("/product_info/{id}")
     public String getProductInfo(@PathVariable("id") Long id,
