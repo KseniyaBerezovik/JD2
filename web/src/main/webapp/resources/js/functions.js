@@ -50,57 +50,45 @@ function addToCart(id) {
     })
 }
 
-// function getYear(year) {
-//     var currentUrl = window.location.href.toString();
-//     var newUrl;
-//     if(currentUrl.indexOf('?') >= 0) {
-//         newUrl = currentUrl + '&year=' + year
-//     } else {
-//         newUrl = currentUrl + "?year=" + year
-//     }
-//     console.log(newUrl);
-//     $.ajax(newUrl,  {
-//         method: "GET",
-//     }).done(function success() {
-//         console.log('success');
-//         window.history.pushState({}, "", newUrl.toString());
-//     })
-// }
-
 function getFilters() {
     var currentUrl = window.location.href.toString().split("?")[0];
     var newUrl = currentUrl;
     var filters = document.getElementsByClassName("filters");
+
     for (i = 0; i < filters.length; i++) { //processing year
         if(filters[i].dataset.filter == 'year' && filters[i].type == 'checkbox' && filters[i].checked) {
-            if (newUrl.indexOf('?') >= 0) {
-                newUrl += '&';
-            } else {
-                newUrl += '?';
-            }
+            newUrl = addDelimiter(newUrl);
             newUrl += filters[i].dataset.filter + '=' + filters[i].dataset.filterValue;
         } else if(filters[i].type == 'select-one' && filters[i].value != '') {
-            if (newUrl.indexOf('?') >= 0) {
-                newUrl += '&';
-            } else {
-                newUrl += '?';
-            }
+            newUrl = addDelimiter(newUrl);
             newUrl += filters[i].dataset.filter + filters[i].dataset.fromTo + '=' + filters[i].value;
         }
     }
 
     for(i = 0; i < filters.length; i++) { //processing price
         if(filters[i].dataset.filter == 'price' && filters[i].value != '') {
-            if (newUrl.indexOf('?') >= 0) {
-                newUrl += '&';
-            } else {
-                newUrl += '?';
-            }
+            newUrl = addDelimiter(newUrl);
             newUrl += filters[i].dataset.filter + filters[i].dataset.fromTo + '=' + filters[i].value;
+        }
+    }
+
+    for(i = 0; i < filters.length; i++) { //processing OS
+        if(filters[i].dataset.filter == 'os' && filters[i].checked) {
+            newUrl = addDelimiter(newUrl);
+            newUrl += filters[i].dataset.filter + '=' + filters[i].value;
         }
     }
 
     console.log(newUrl);
     window.location.href = newUrl;
+}
+
+function addDelimiter(url) {
+    if (url.indexOf('?') >= 0) {
+        url += '&';
+    } else {
+        url += '?';
+    }
+    return url;
 }
 

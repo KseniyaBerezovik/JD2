@@ -1,11 +1,14 @@
 package by.itacademy.service;
 
+import by.itacademy.dto.FilterDto;
 import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Characteristic;
+import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.service.common.BaseService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -17,4 +20,6 @@ public interface ProductService  extends BaseService<Product> {
     List<Product> getByCharacteristics(List<Characteristic> characteristics);
     Set<Product> getProductsByYears(List<Integer> years, Integer yearFrom, Integer yearTo);
     Set<Product> getProductsByPrice(Integer priceFrom, String priceTo);
+    Set<Product> getByDetailAndValueList(Detail detail, List<String> valueList);
+    List<Product> getByFilter(FilterDto filterDto);
 }

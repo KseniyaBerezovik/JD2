@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = "category")
+@ToString(callSuper = true)
 public class Product extends BaseEntity {
     @Column(name = "name")
     private String name;

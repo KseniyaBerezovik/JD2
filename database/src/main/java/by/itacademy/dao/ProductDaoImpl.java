@@ -3,12 +3,15 @@ package by.itacademy.dao;
 import by.itacademy.dao.common.BaseDaoImpl;
 import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Characteristic;
+import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+import java.util.*;
 
 @Repository
 public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
@@ -73,10 +76,13 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
         if(priceTo.equals("undefined")) {
             List<Product> products = getSessionFactory().getCurrentSession()
                     .createQuery("select p from Product p where p.price >= :priceFrom", Product.class)
-                    .setParameter("priceFrom", priceFrom)
+                    .setParameter("priceFrom", Double.valueOf(priceFrom))
                     .getResultList();
             return products;
         } else {
+            if(priceFrom == null) {
+                priceFrom = 0;
+            }
             List<Product> products = getSessionFactory().getCurrentSession()
                     .createQuery("select p from Product p where p.price >= :priceFrom and p.price <= :priceTo", Product.class)
                     .setParameter("priceFrom", Double.valueOf(priceFrom))
@@ -86,19 +92,27 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
         }
     }
 
-    public void testCriteria() {
+
+    @Override
+    public List<Product> testCriteria(Map<Long, List<String>> detailValueMap) {
+
         CriteriaBuilder cb = getSessionFactory().getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<Product> criteria = cb.createQuery(Product.class);
-        Root<Product> product = criteria.from(Product.class);
-        product.join("");
+        Root<Characteristic> characteristic = criteria.from(Characteristic.class);
+        Join<Characteristic, Detail> detail = characteristic.join("detail");
+        Join<Characteristic, Product> product = characteristic.join("product");
+
+        criteria.select(product);
+
+        for(Map.Entry<Long, List<String>> entry : detailValueMap.entrySet()) {
+            criteria.where(cb.and(cb.equal(characteristic.get("detail").get("id"), entry.getKey()),
+                                 characteristic.get("value").in(entry.getValue())
+            ));
+        }
+
+        List<Product> products = getSessionFactory().getCurrentSession().createQuery(criteria).getResultList();
+        System.out.println("PRODUCTS:");
+        products.forEach(System.out::println);
+        return products;
     }
 }
-//    CriteriaBuilder cb = session.getCriteriaBuilder();
-//    CriteriaQuery<Employee> criteria = cb.createQuery(Employee.class);
-//    Root<Employee> employee = criteria.from(Employee.class);
-//    Join<Employee, Organization> organization = employee.join(Employee_.organization);
-//
-//    Path<String> orgName = organization.get(Organization_.name);
-//        criteria.select(employee).where(cb.equal(orgName, organizationName));
-//
-//                return session.createQuery(criteria).getResultList();

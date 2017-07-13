@@ -29,7 +29,7 @@
                             </select>
                         </div>
                         <div class="col-lg-6">
-                            <select class="form-control filters" data-filter="year" data-from-to="to">
+                            <select class="form-control filters" data-filter="year" data-from-to="To">
                                 <option disabled selected value>До</option>
                                 <option>2014</option>
                                 <option>2013</option>
@@ -43,32 +43,32 @@
     </div>
 
     <div th:fragment="producer">
-        <div class="panel panel-default filters producer">
-            <div class="panel-body">
-                Производитель
-                <div class="checkbox">
-                    <label><input type="checkbox" value="">Apple</label>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" value="">Samsung</label>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" value="">Xiaomi</label>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <div class="col-lg-9">
-                            <select class="form-control">
-                                <option disabled selected value>Ещё варианты</option>
-                                <option>Sony</option>
-                                <option>Lenovo</option>
-                                <option>HTC</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--<div class="panel panel-default filters producer">-->
+            <!--<div class="panel-body">-->
+                <!--Производитель-->
+                <!--<div class="checkbox">-->
+                    <!--<label><input type="checkbox" value="">Apple</label>-->
+                <!--</div>-->
+                <!--<div class="checkbox">-->
+                    <!--<label><input type="checkbox" value="">Samsung</label>-->
+                <!--</div>-->
+                <!--<div class="checkbox">-->
+                    <!--<label><input type="checkbox" value="">Xiaomi</label>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="form-group">-->
+                        <!--<div class="col-lg-9">-->
+                            <!--<select class="form-control">-->
+                                <!--<option disabled selected value>Ещё варианты</option>-->
+                                <!--<option>Sony</option>-->
+                                <!--<option>Lenovo</option>-->
+                                <!--<option>HTC</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
     </div>
 
     <div th:fragment="price">
@@ -101,17 +101,32 @@
     </div>
 
     <div th:fragment="OS">
-        <div class="panel panel-default filters OS">
+        <div class="panel panel-default filters">
             <div class="panel-body">
                 Операционная система
                 <div class="checkbox">
-                    <label><input type="checkbox" value="">Android</label>
+                    <label>
+                        <input class="filters"
+                               type="checkbox"
+                               data-filter="os"
+                               value="Android">Android
+                    </label>
                 </div>
                 <div class="checkbox">
-                    <label><input type="checkbox" value="">Windows phone</label>
+                    <label>
+                        <input class="filters"
+                               type="checkbox"
+                               data-filter="os"
+                               value="Windows phone">Windows phone
+                    </label>
                 </div>
                 <div class="checkbox">
-                    <label><input type="checkbox" value="">Apple iOS</label>
+                    <label>
+                        <input class="filters"
+                               type="checkbox"
+                               data-filter="os"
+                               value="Apple iOS">Apple iOS
+                    </label>
                 </div>
             </div>
         </div>

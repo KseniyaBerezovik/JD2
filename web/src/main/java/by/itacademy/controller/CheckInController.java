@@ -35,6 +35,6 @@ public class CheckInController {
             return "checkIn";
         }
         userService.save(user);
-        return "redirect:main_page";
+        return "redirect:login";
     }
 }

@@ -11,4 +11,5 @@ public interface CharacteristicService extends BaseService<Characteristic> {
     List<Characteristic> getByProduct(Product product);
     List<Characteristic> getByDetailAndIntervalValues (Detail detail, String from, String to);
     List<Characteristic> getByDetailAndValue (Detail detail, String value);
+    List<Characteristic> getByDetailAndValueList (Detail detail, List<String> values);
 }

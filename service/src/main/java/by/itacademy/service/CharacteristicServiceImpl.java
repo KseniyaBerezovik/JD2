@@ -31,4 +31,9 @@ public class CharacteristicServiceImpl extends BaseServiceImpl<Characteristic> i
     public List<Characteristic> getByDetailAndValue(Detail detail, String value) {
         return characteristicDao.getByDetailAndValue(detail, value);
     }
+
+    @Override
+    public List<Characteristic> getByDetailAndValueList(Detail detail, List<String> values) {
+        return characteristicDao.getByDetailAndValueList(detail, values);
+    }
 }

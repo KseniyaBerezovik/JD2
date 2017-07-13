@@ -5,8 +5,10 @@ import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
 import org.springframework.stereotype.Repository;
+import sun.awt.SunHints;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class CharacteristicDaoImpl extends BaseDaoImpl<Characteristic> implements CharacteristicDao {
@@ -20,6 +22,16 @@ public class CharacteristicDaoImpl extends BaseDaoImpl<Characteristic> implement
                 .getResultList();
         return characteristics;
 
+    }
+
+    @Override
+    public List<Characteristic> getByDetailAndValueList(Detail detail, List<String> values) {
+        List<Characteristic> characteristics = getSessionFactory().getCurrentSession()
+                .createQuery("select c from Characteristic c where c.detail.name=:name and c.value in (:values)", Characteristic.class)
+                .setParameter("name", detail.getName())
+                .setParameter("values", values)
+                .getResultList();
+        return characteristics;
     }
 
     @Override

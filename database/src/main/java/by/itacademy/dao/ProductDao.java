@@ -7,6 +7,8 @@ import by.itacademy.entity.productEntity.Product;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface ProductDao extends BaseDao<Product> {
     List<Product> getByCategoryName(String categoryName);
@@ -15,4 +17,6 @@ public interface ProductDao extends BaseDao<Product> {
     Integer getNextImageNumber();
     Integer getCountOfProducts(Category category);
     List<Product> getByIntervalPrice(Integer priceFrom, String priceTo);
+    List<Product> testCriteria(Map<Long, List<String>> detailValueMap);
+
 }

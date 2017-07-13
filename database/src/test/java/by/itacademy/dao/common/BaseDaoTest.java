@@ -51,6 +51,7 @@ public abstract class BaseDaoTest<T extends BaseEntity> {
     @Test
     public void updateTest() {
         T model = getModel();
+        getDao().save(model);
         getDao().update(model);
         T result = getDao().getByID(model.getId());
         assertNotNull(result);
