@@ -2,23 +2,25 @@ package by.itacademy.entity.orderEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
 import by.itacademy.entity.productEntity.Product;
+import by.itacademy.entity.userEntity.User;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "order_content")
+@Table(name = "carts")
 @Data
-public class OrderContent extends BaseEntity {
+public class Cart extends BaseEntity {
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User owner;
+
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
     @Column(name = "amount")
     private Integer amount;
-
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
 }

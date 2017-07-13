@@ -43,7 +43,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         if (user == null) {
             throw new UsernameNotFoundException("Can't find user.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), getUserAuthority(user));
+        return new org.springframework.security.core.userdetails.User(user.getLogin(),
+                                                                        user.getPassword(),
+                                                                        getUserAuthority(user));
     }
 
     private Set<GrantedAuthority> getUserAuthority(User user) {

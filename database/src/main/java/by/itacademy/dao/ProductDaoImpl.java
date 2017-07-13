@@ -7,6 +7,7 @@ import by.itacademy.entity.productEntity.Product;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,7 +24,17 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
 
     @Override
     public List<Product> getByCharacteristics(List<Characteristic> characteristics) {
-        return null;
+        List<Product> products = new ArrayList<>();
+        for(Characteristic characteristic : characteristics) {
+            List<Product> resultList = getSessionFactory().getCurrentSession()
+                    .createQuery("select c.product from Characteristic c where c.detail.id=:detailId " +
+                            "and c.value=:currentValue", Product.class)
+                    .setParameter("detailId", characteristic.getDetail().getName())
+                    .setParameter("currentValue", characteristic.getValue())
+                    .getResultList();
+            products.addAll(resultList);
+        }
+        return products;
     }
 
     @Override

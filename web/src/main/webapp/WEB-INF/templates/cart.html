@@ -3,13 +3,36 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <div th:insert="~{fragments :: connect}"/>
 </head>
-<body>
-<p th:text="#{cart}"></p>
+<body class="lightRed">
+<div th:insert="~{fragments :: header}"></div>
+<div class="myContent">
+    <div class="productContent">
+
+        <div th:insert="~{fragments :: navbar-default}"></div>
+
+        <div th:object="${carts}">
+            <div th:each="cart : ${carts}">
+                <div class="form-group col-lg-10">
+                    <p th:text="${cart.product.name} + ' в количестве: ' + ${cart.amount}"></p>
+                    <select size="1" name="amount" th:id="'amount' + ${cart.product.id}">
+                        <option th:each="i : ${#numbers.sequence(1, cart.amount)}"
+                                th:value="${i}"
+                                th:text="${i}">
+                        </option>
+                    </select>
+                    <div class="btn-group" role="group">
+                        <div th:value="${cart.product.id}" th:id="'productId' + ${cart.product.id}"></div>
+                        <button class="btn btn-default" type="button"
+                                th:onclick="'deleteFromCart(\'' + ${cart.product.id} + '\');'">
+                            Удалить из корзины
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
 </body>

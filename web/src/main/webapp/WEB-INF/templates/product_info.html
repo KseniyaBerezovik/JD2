@@ -5,16 +5,10 @@
 <head>
     <meta charset="utf-8">
     <title>Main title</title>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
+    <div th:insert="~{fragments :: connect}"/>
 </head>
 <body class="lightRed">
-<div th:insert="~{navbar :: header}"></div>
+<div th:insert="~{fragments :: header}"></div>
 <div class="myContent">
     <div class="productContent">
 
@@ -29,7 +23,7 @@
             <!--</div>-->
         <!--</nav>-->
 
-        <div th:insert="~{navbar :: navbar-default}"></div>
+        <div th:insert="~{fragments :: navbar-default}"></div>
 
         <div th:object="${product}">
     <p th:text="${product.name}"></p>

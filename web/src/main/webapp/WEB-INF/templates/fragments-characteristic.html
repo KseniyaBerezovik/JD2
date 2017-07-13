@@ -1,0 +1,113 @@
+<head xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="year">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                Год выпуска
+                <div class="checkbox">
+                    <label>
+                        <input class="filters" type="checkbox" data-filter="year" data-filter-value="2017">2017
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input class="filters" type="checkbox" data-filter="year" data-filter-value="2016">2016
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input class="filters" type="checkbox" data-filter="year" data-filter-value="2015">2015
+                    </label>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <select class="form-control filters" data-filter="year" data-from-to="From">
+                                <option disabled selected value>От</option>
+                                <option>2014</option>
+                                <option>2013</option>
+                                <option>2012</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6">
+                            <select class="form-control filters" data-filter="year" data-from-to="To">
+                                <option disabled selected value>До</option>
+                                <option>2014</option>
+                                <option>2013</option>
+                                <option>2012</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="producer">
+        <div class="panel panel-default filters producer">
+            <div class="panel-body">
+                Производитель
+                <div class="checkbox">
+                    <label><input type="checkbox" value="">Apple</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="">Samsung</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="">Xiaomi</label>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-9">
+                            <select class="form-control">
+                                <option disabled selected value>Ещё варианты</option>
+                                <option>Sony</option>
+                                <option>Lenovo</option>
+                                <option>HTC</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="price">
+        <div class="panel panel-default filters price">
+            <div class="panel-body">
+                Цена
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="От">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="До">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="OS">
+        <div class="panel panel-default filters OS">
+            <div class="panel-body">
+                Операционная система
+                <div class="checkbox">
+                    <label><input type="checkbox" value="">Android</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="">Windows phone</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="">Apple iOS</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</head>

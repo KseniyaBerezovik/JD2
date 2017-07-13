@@ -2,6 +2,7 @@ package by.itacademy.service;
 
 import by.itacademy.dao.ProductDao;
 import by.itacademy.entity.productEntity.Category;
+import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
             pages.add(i + 1);
         }
         return pages;
+    }
+
+    @Override
+    public List<Product> getByCharacteristics(List<Characteristic> characteristics) {
+        return productDao.getByCharacteristics(characteristics);
     }
 }

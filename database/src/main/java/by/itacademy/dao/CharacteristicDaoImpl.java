@@ -25,9 +25,9 @@ public class CharacteristicDaoImpl extends BaseDaoImpl<Characteristic> implement
     @Override
     public List<Characteristic> getByDetailAndIntervalValues(Detail detail, String from, String to) {
         List<Characteristic> characteristics = getSessionFactory().getCurrentSession()
-                .createQuery("select c from Characteristic c where c.detail.name=:name and " +
+                .createQuery("select c from Characteristic c where c.detail.id=:id and " +
                         "c.value >= :from and c.value <= :to", Characteristic.class)
-                .setParameter("name", detail.getName())
+                .setParameter("id", detail.getId())
                 .setParameter("from", from)
                 .setParameter("to", to)
                 .getResultList();
