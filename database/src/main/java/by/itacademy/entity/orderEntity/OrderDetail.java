@@ -1,25 +1,23 @@
 package by.itacademy.entity.orderEntity;
 
 import by.itacademy.entity.otherEntity.BaseEntity;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_details")
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class OrderDetail extends BaseEntity {
 
     @Column(name = "date_of_reception")
     private LocalDateTime dateOfReceipt;
 
-    @Column(name = "departure_data")
-    private LocalDateTime departureDate;
-
     @Column(name = "closing_date")
     private LocalDateTime closingDate;
-
-    @OneToOne(mappedBy = "detail", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private Order order;
 }

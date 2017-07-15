@@ -35,7 +35,14 @@ public class CartDaoImpl extends BaseDaoImpl<Cart> implements CartDao {
         Long count = getSessionFactory().getCurrentSession()
                 .createQuery("select sum(c.amount) from Cart c where c.owner.id=:id", Long.class)
                 .setParameter("id", user.getId())
-                .getSingleResult();
-        return Math.toIntExact(count);
+                .uniqueResult();
+        return count == null ? 0 : Math.toIntExact(count);
+    }
+
+    @Override
+    public void cleanByUser(User user) {
+        getSessionFactory().getCurrentSession()
+                .createQuery("delete from Cart c where c.owner.id=:id")
+                .setParameter("id", user.getId()).executeUpdate();
     }
 }

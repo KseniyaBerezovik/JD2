@@ -12,11 +12,7 @@ import java.util.Set;
 
 public interface ProductDao extends BaseDao<Product> {
     List<Product> getByCategoryName(String categoryName);
-    List<Product> getByCharacteristics(List<Characteristic> characteristics);
-    List<Product> getByNumberPageAndCount(Integer numberPage, Integer numberOfProductInPage, Category category);
     Integer getNextImageNumber();
-    Integer getCountOfProducts(Category category);
-    List<Product> getByIntervalPrice(Integer priceFrom, String priceTo);
-    List<Product> testCriteria(Map<Long, List<String>> detailValueMap);
+    List<Long> testCriteria(Map<Long, List<String>> detailValueMap);
 
 }

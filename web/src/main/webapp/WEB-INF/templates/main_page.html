@@ -33,7 +33,7 @@
                             </div>
 
                             <div th:each="detail:${details}">
-                                <div th:if="${detail.name.equals('Страна производитель')}">
+                                <div th:if="${detail.name.equals('Производитель')}">
                                     <div th:insert="~{fragments-characteristic :: producer}"/>
                                 </div>
                             </div>
@@ -88,25 +88,42 @@
                                     </a>
                                 </div>
 
-                                <div class="col-lg-1">
-                                    <div class="form-group">
-                                        <input class="form-control"
-                                               placeholder="Количество"
-                                               name="amount"
-                                               th:id="'amount' + ${product.id}"
-                                               type="number"/>
+                                <div sec:authorize="${hasAuthority('USER')}">
+                                    <div class="col-lg-1">
+                                        <div class="form-group">
+                                            <input class="form-control"
+                                                   placeholder="Количество"
+                                                   name="amount"
+                                                   th:id="'amount' + ${product.id}"
+                                                   type="number"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-1">
+                                        <div class="btn-group" role="group">
+                                            <div th:value="${product.id}" th:id="'productId' + ${product.id}"></div>
+                                            <button class="btn btn-default" type="button"
+                                                    th:onclick="'addToCart(\'' + ${product.id} + '\');'">
+                                                Добавить в корзину
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-1">
-                                    <div class="btn-group" role="group">
-                                        <div th:value="${product.id}" th:id="'productId' + ${product.id}"></div>
-                                        <button class="btn btn-default" type="button"
-                                                th:onclick="'addToCart(\'' + ${product.id} + '\');'">
-                                            Добавить в корзину
-                                        </button>
+                                <div sec:authorize="${hasAuthority('ADMIN')}">
+                                    <div class="col-lg-1">
+                                        <div class="btn-group" role="group">
+                                            <div th:value="${product.id}" th:id="'productId' + ${product.id}"></div>
+                                            <a class="btn btn-default"
+                                               type="button"
+                                               th:href="'/admin/change-product/' + ${product.id} + '/'">
+                                                Изменить
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>

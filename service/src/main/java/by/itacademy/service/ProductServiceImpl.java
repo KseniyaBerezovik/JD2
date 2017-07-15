@@ -2,17 +2,13 @@ package by.itacademy.service;
 
 import by.itacademy.dao.ProductDao;
 import by.itacademy.dto.FilterDto;
-import by.itacademy.entity.productEntity.Category;
-import by.itacademy.entity.productEntity.Characteristic;
-import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.service.common.BaseServiceImpl;
-import lombok.extern.log4j.Log4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,8 +18,6 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl extends BaseServiceImpl<Product> implements ProductService  {
 
     private static Logger LOGGER = Logger.getLogger(ProductService.class);
-
-    private final static int PRODUCT_IN_PAGE = 3;
 
     @Autowired
     private ProductDao productDao;
@@ -41,68 +35,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     }
 
     @Override
-    public List<Product> getByNumberPageAndCount(Integer numberPage, Category category) {
-        return productDao.getByNumberPageAndCount(numberPage, PRODUCT_IN_PAGE, category);
-    }
-
-    @Override
     public Integer getNextImageNumber() {
         return productDao.getNextImageNumber();
     }
 
-    @Override
-    public List<Integer> getPages(Category category) {
-        Integer products = productDao.getCountOfProducts(category);
-        int pageCount = (int) Math.ceil((double) products / PRODUCT_IN_PAGE);
-        List<Integer> pages = new ArrayList<>();
-        for(int i = 0; i < pageCount; i++) {
-            pages.add(i + 1);
-        }
-        return pages;
-    }
-
-    @Override
-    public List<Product> getByCharacteristics(List<Characteristic> characteristics) {
-        return productDao.getByCharacteristics(characteristics);
-    }
-
-    @Override
-    public Set<Product> getProductsByYears(List<Integer> years, Integer yearFrom, Integer yearTo) {
-        Set<Product> productsToAdd = new HashSet<>();
-
-        if(yearFrom != 0 || yearTo != 3000) {
-            Detail yearDetail = detailService.getByID(1L);
-            List<Characteristic> characteristics = characteristicService.getByDetailAndIntervalValues(yearDetail, String.valueOf(yearFrom), String.valueOf(yearTo));
-            Set<Product> productsInIntervalValue = characteristics.stream().map(ch -> ch.getProduct()).collect(Collectors.toSet());
-            productsToAdd.addAll(productsInIntervalValue);
-        }
-
-        if(years != null) {
-            for(Integer year : years) {
-                Detail yearDetail = detailService.getByID(1L);
-                List<Characteristic> characteristics = characteristicService.getByDetailAndValue(yearDetail, String.valueOf(year));
-                Set<Product> productsInValue = characteristics.stream().map(ch -> ch.getProduct()).collect(Collectors.toSet());
-                productsToAdd.addAll(productsInValue);
-            }
-        }
-
-        return productsToAdd;
-    }
-
-    @Override
-    public Set<Product> getProductsByPrice(Integer priceFrom, String priceTo) {
-        Set<Product> productsToAdd = new HashSet<>();
-        productsToAdd.addAll(productDao.getByIntervalPrice(priceFrom, priceTo));
-        return productsToAdd;
-    }
-
-    @Override
-    public Set<Product> getByDetailAndValueList(Detail detail, List<String> valueList) {
-        return characteristicService.getByDetailAndValueList(detail, valueList)
-                .stream()
-                .map(ch -> ch.getProduct())
-                .collect(Collectors.toSet());
-    }
 
     @Override
     public List<Product> getByFilter(FilterDto filterDto) {
@@ -116,34 +52,32 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
             addOsValues(detailIdValueMap, filterDto.getOs());
         }
 
-        List<Product> resultProducts = new ArrayList<>();
-        List<Product> productsByFilter = new ArrayList<>();
-        List<Product> productsByPrice = new ArrayList<>();
-
-        if(!detailIdValueMap.isEmpty()) {
-            productsByFilter = productDao.testCriteria(detailIdValueMap);
-        }
-
         if(isPriceParamsPresent(filterDto)) {
-            productsByPrice = productDao.getByIntervalPrice(filterDto.getPriceFrom(), filterDto.getPriceTo());
+            addPriceParams(detailIdValueMap, filterDto.getPriceFrom(), filterDto.getPriceTo());
         }
 
-        if(!productsByFilter.isEmpty() && !productsByPrice.isEmpty()) {
-            resultProducts = productsByFilter.stream().filter(productsByPrice::contains).collect(Collectors.toList());
-        } else {
-            if(!productsByFilter.isEmpty()) {
-                resultProducts = productsByFilter;
-            } else if(!productsByPrice.isEmpty()) {
-                resultProducts = productsByPrice;
-            }
-        }
+        List<Product> resultProducts = productDao.testCriteria(detailIdValueMap)
+                .stream()
+                .map(i -> productDao.getByID(i))
+                .collect(Collectors.toList());
 
-        Set<Product> collect = resultProducts.stream().collect(Collectors.toSet());
-        return new ArrayList<>(collect);
+        return resultProducts;
+    }
+
+    private void addPriceParams(Map<Long, List<String>> detailIdValueMap, String priceFrom, String priceTo) {
+        if(priceFrom != null && priceTo != null) {
+            detailIdValueMap.put(4L, Arrays.asList(priceFrom, priceTo));
+        }
+        if(priceFrom != null && priceTo == null) {
+            detailIdValueMap.put(4L, Arrays.asList("FROM:" + priceFrom));
+        }
+        if(priceFrom == null && priceTo != null) {
+            detailIdValueMap.put(4L, Arrays.asList("TO:" + priceTo));
+        }
     }
 
     private boolean isPriceParamsPresent(FilterDto filterDto) {
-        return filterDto.getPriceFrom() != null || !filterDto.getPriceTo().equals("undefined");
+        return filterDto.getPriceFrom() != null || filterDto.getPriceTo() != null;
     }
 
     private boolean isYearsParamPresent(FilterDto filterDto) {

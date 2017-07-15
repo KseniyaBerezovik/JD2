@@ -79,6 +79,13 @@ function getFilters() {
         }
     }
 
+    for(i = 0; i < filters.length; i++) { //processing producer
+        if(filters[i].dataset.filter == 'producer' && filters[i].checked) {
+            newUrl = addDelimiter(newUrl);
+            newUrl += filters[i].dataset.filter + '=' + filters[i].value;
+        }
+    }
+
     console.log(newUrl);
     window.location.href = newUrl;
 }

@@ -12,5 +12,6 @@ public interface CartService extends BaseService<Cart> {
     void deleteProductFromCart(User user, Product product, Integer amount);
     void addToCart(User user, Product product, Integer amount);
     Integer getCountProductsInCart(User user);
+    void cleanByUser(User user);
 
 }

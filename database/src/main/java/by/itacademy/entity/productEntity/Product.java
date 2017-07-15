@@ -4,6 +4,7 @@ import by.itacademy.entity.otherEntity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
@@ -31,4 +32,9 @@ public class Product extends BaseEntity {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Version
+    @Getter
+    @Setter
+    private Long version;
 }

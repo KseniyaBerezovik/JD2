@@ -1,17 +1,15 @@
 package by.itacademy.dao;
 
 import by.itacademy.dao.common.BaseDaoImpl;
-import by.itacademy.entity.productEntity.Category;
-import by.itacademy.entity.productEntity.Characteristic;
-import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
+import org.hibernate.query.NativeQuery;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Repository
 public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
@@ -21,32 +19,6 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
         List<Product> products = getSessionFactory().getCurrentSession()
                 .createQuery("select p from Product p where p.category.name=:name", Product.class)
                 .setParameter("name", categoryName)
-                .getResultList();
-        return products;
-    }
-
-    @Override
-    public List<Product> getByCharacteristics(List<Characteristic> characteristics) {
-        List<Product> products = new ArrayList<>();
-        for(Characteristic characteristic : characteristics) {
-            List<Product> resultList = getSessionFactory().getCurrentSession()
-                    .createQuery("select c.product from Characteristic c where c.detail.id=:detailId " +
-                            "and c.value=:currentValue", Product.class)
-                    .setParameter("detailId", characteristic.getDetail().getName())
-                    .setParameter("currentValue", characteristic.getValue())
-                    .getResultList();
-            products.addAll(resultList);
-        }
-        return products;
-    }
-
-    @Override
-    public List<Product> getByNumberPageAndCount(Integer numberPage, Integer numberOfProductInPage, Category category) {
-        List<Product> products = getSessionFactory().getCurrentSession()
-                .createQuery("select p from Product p where p.category.id=:id order by p.id asc", Product.class)
-                .setParameter("id", category.getId())
-                .setFirstResult(numberOfProductInPage * ((numberPage - 1) + 1))
-                .setMaxResults(numberOfProductInPage)
                 .getResultList();
         return products;
     }
@@ -63,56 +35,48 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
     }
 
     @Override
-    public Integer getCountOfProducts(Category category) {
-        Long count = getSessionFactory().getCurrentSession()
-                .createQuery("select count(*) from Product as p where p.category.id=:id", Long.class)
-                .setParameter("id", category.getId())
-                .getSingleResult();
-        return Math.toIntExact(count);
-    }
+    public List<Long> testCriteria(Map<Long, List<String>> detailValueMap) {
 
-    @Override
-    public List<Product> getByIntervalPrice(Integer priceFrom, String priceTo) {
-        if(priceTo.equals("undefined")) {
-            List<Product> products = getSessionFactory().getCurrentSession()
-                    .createQuery("select p from Product p where p.price >= :priceFrom", Product.class)
-                    .setParameter("priceFrom", Double.valueOf(priceFrom))
-                    .getResultList();
-            return products;
-        } else {
-            if(priceFrom == null) {
-                priceFrom = 0;
-            }
-            List<Product> products = getSessionFactory().getCurrentSession()
-                    .createQuery("select p from Product p where p.price >= :priceFrom and p.price <= :priceTo", Product.class)
-                    .setParameter("priceFrom", Double.valueOf(priceFrom))
-                    .setParameter("priceTo", Double.valueOf(priceTo))
-                    .getResultList();
-            return products;
-        }
-    }
+        StringBuilder nativeQuery = new StringBuilder("select p.id as id from products p " +
+                "LEFT JOIN characteristics c1 ON p.id=c1.product_id AND c1.detail_id=1 " +
+                "LEFT JOIN characteristics c2 ON p.id=c2.product_id AND c2.detail_id=2 " +
+                "LEFT JOIN characteristics c3 ON p.id=c3.product_id AND c3.detail_id=3 " +
+                "LEFT JOIN characteristics c4 ON p.id=c4.product_id AND c4.detail_id=4 " +
+                "WHERE ");
 
-
-    @Override
-    public List<Product> testCriteria(Map<Long, List<String>> detailValueMap) {
-
-        CriteriaBuilder cb = getSessionFactory().getCurrentSession().getCriteriaBuilder();
-        CriteriaQuery<Product> criteria = cb.createQuery(Product.class);
-        Root<Characteristic> characteristic = criteria.from(Characteristic.class);
-        Join<Characteristic, Detail> detail = characteristic.join("detail");
-        Join<Characteristic, Product> product = characteristic.join("product");
-
-        criteria.select(product);
-
+        List<String> forAddingToQuery = new ArrayList<>();
         for(Map.Entry<Long, List<String>> entry : detailValueMap.entrySet()) {
-            criteria.where(cb.and(cb.equal(characteristic.get("detail").get("id"), entry.getKey()),
-                                 characteristic.get("value").in(entry.getValue())
-            ));
+            if(entry.getKey() == 4L) {
+                if(entry.getValue().size() == 2) {
+                    forAddingToQuery.add("c4.value >= " + entry.getValue().get(0));
+                    forAddingToQuery.add("c4.value <= " + entry.getValue().get(1));
+                } else {
+                    if(entry.getValue().get(0).split(":")[0].equals("FROM")) {
+                        forAddingToQuery.add("c4.value >= " + entry.getValue().get(0).split(":")[1]);
+                    }
+                    if(entry.getValue().get(0).split(":")[0].equals("TO")) {
+                        forAddingToQuery.add("c4.value <= " + entry.getValue().get(0).split(":")[1]);
+                    }
+                }
+            } else {
+                String num = String.valueOf(entry.getKey());
+                forAddingToQuery.add("c" + num + ".value IN(?" + num +")");
+            }
+        }
+        String toAdding = String.join(" AND ", forAddingToQuery);
+
+        String fullNativeQuery = nativeQuery + toAdding;
+        System.out.println("QUERY: " + fullNativeQuery);
+
+        NativeQuery query = getSessionFactory().getCurrentSession().createNativeQuery(fullNativeQuery);
+
+        if(detailValueMap.containsKey(1L)) {
+            query.setParameter(1, detailValueMap.get(1L));
+        }
+        if(detailValueMap.containsKey(3L)) {
+            query.setParameter(3, detailValueMap.get(3L));
         }
 
-        List<Product> products = getSessionFactory().getCurrentSession().createQuery(criteria).getResultList();
-        System.out.println("PRODUCTS:");
-        products.forEach(System.out::println);
-        return products;
+        return (List<Long>) query.list().stream().map(i -> Long.valueOf(Objects.toString(i))).collect(Collectors.toList());
     }
 }

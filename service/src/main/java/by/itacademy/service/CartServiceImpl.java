@@ -64,4 +64,9 @@ public class CartServiceImpl extends BaseDaoImpl<Cart> implements CartService {
     public Integer getCountProductsInCart(User user) {
         return cartDao.getCountProductsInCart(user);
     }
+
+    @Override
+    public void cleanByUser(User user) {
+        cartDao.cleanByUser(user);
+    }
 }

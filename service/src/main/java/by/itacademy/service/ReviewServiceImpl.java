@@ -3,12 +3,11 @@ package by.itacademy.service;
 import by.itacademy.dao.ReviewDao;
 import by.itacademy.entity.otherEntity.Review;
 import by.itacademy.entity.productEntity.Product;
-import by.itacademy.entity.userEntity.User;
 import by.itacademy.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 

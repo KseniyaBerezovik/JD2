@@ -12,6 +12,7 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Service
 @EqualsAndHashCode
+@ToString
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

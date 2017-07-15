@@ -14,12 +14,6 @@ import java.util.Set;
 
 public interface ProductService  extends BaseService<Product> {
     List<Product> getByCategoryName(String name);
-    List<Product> getByNumberPageAndCount(Integer numberPage, Category category);
     Integer getNextImageNumber();
-    List<Integer> getPages(Category category);
-    List<Product> getByCharacteristics(List<Characteristic> characteristics);
-    Set<Product> getProductsByYears(List<Integer> years, Integer yearFrom, Integer yearTo);
-    Set<Product> getProductsByPrice(Integer priceFrom, String priceTo);
-    Set<Product> getByDetailAndValueList(Detail detail, List<String> valueList);
     List<Product> getByFilter(FilterDto filterDto);
 }

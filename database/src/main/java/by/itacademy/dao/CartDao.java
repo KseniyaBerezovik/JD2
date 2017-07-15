@@ -12,4 +12,5 @@ public interface CartDao extends BaseDao<Cart> {
     List<Cart> getByUser(User user);
     Cart getCart(User user, Product product);
     Integer getCountProductsInCart(User user);
+    void cleanByUser(User user);
 }

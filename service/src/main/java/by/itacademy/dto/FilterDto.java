@@ -11,7 +11,7 @@ public class FilterDto {
     private List<Integer> years;
     private Integer yearFrom;
     private Integer yearTo;
-    private Integer priceFrom;
+    private String priceFrom;
     private String priceTo;
     private List<String> os;
 }

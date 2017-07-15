@@ -44,9 +44,6 @@ public class ProductController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private DetailService detailService;
-
     @ModelAttribute("categories")
     public List<Category> addCategories() {
         return categoryService.findAll();
@@ -69,8 +66,8 @@ public class ProductController {
                                         @RequestParam(value = "year", required = false) List<Integer> years,
                                         @RequestParam(value = "yearFrom", required = false) Integer yearFrom,
                                         @RequestParam(value = "yearTo", required = false) Integer yearTo,
-                                        @RequestParam(value = "priceFrom", required = false) Integer priceFrom,
-                                        @RequestParam(value = "priceTo", required = false, defaultValue = "undefined") String priceTo,
+                                        @RequestParam(value = "priceFrom", required = false) String priceFrom,
+                                        @RequestParam(value = "priceTo", required = false) String priceTo,
                                         @RequestParam(value = "os", required = false) List<String> os,
                                         Model model) {
         Category category = categoryService.getByID(id);
@@ -79,10 +76,10 @@ public class ProductController {
         model.addAttribute("details", details);
 
         boolean allParamsUndefined = years == null &&
-                                      yearFrom == null &&
-                                      yearTo == null &&
+                                    yearFrom == null &&
+                                    yearTo == null &&
                                     priceFrom == null &&
-                                    priceTo.equals("undefined") &&
+                                    priceTo == null &&
                                     os == null;
 
         List<Product> products;
@@ -93,32 +90,6 @@ public class ProductController {
             FilterDto filterDto = new FilterDto(years, yearFrom, yearTo, priceFrom, priceTo, os);
             products = productService.getByFilter(filterDto);
         }
-
-
-//        boolean osParamUndefined = os == null;
-//
-//        if(yearParamsUndefined && priceParamsUndefined && osParamUndefined) {
-//            products.addAll(productService.getByCategoryName(category.getName()));
-//        } else {
-//            if(!osParamUndefined){
-//                Detail detail = detailService.getByID(3L);
-//                products = productService.getByDetailAndValueList(detail, os);
-//            }
-//
-//            if(!yearParamsUndefined && !priceParamsUndefined){
-//                Set<Product> productsToAddByYear = productService.getProductsByYears(years, yearFrom, yearTo);
-//                Set<Product> productsToAddByPrice = productService.getProductsByPrice(priceFrom, priceTo);
-//                products = productsToAddByYear.stream().filter(productsToAddByPrice::contains).collect(Collectors.toSet());
-//            } else {
-//                if(!yearParamsUndefined) {
-//                    products = productService.getProductsByYears(years, yearFrom, yearTo);
-//                }
-//                if(!priceParamsUndefined) {
-//                    products = productService.getProductsByPrice(priceFrom, priceTo);
-//                }
-//            }
-//        }
-//
         model.addAttribute("products", products);
         return "main_page";
     }

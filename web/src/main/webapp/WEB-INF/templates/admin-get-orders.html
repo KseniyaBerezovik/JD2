@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Orders</title>
+    <div th:insert="~{fragments :: connect}"/>
+</head>
+<body class="lightRed">
+<div th:insert="~{fragments :: header}"></div>
+<div class="myContent">
+    <div class="productContent">
+
+        <div th:insert="~{fragments :: navbar-default}"></div>
+
+        <table class="table table-striped table-bordered">
+            <p th:text="'Заказы пользователя' + ${orders[0].owner.name} + ' ' + ${orders[0].owner.surname}"></p>
+            <div th:each="order : ${orders}">
+                <p>Содержание заказа: </p>
+                <div th:each="content : ${order.content}">
+                    <p th:text="${content.product.name} + 'количество: ' + ${content.amount}"></p>
+                </div>
+                <p th:text="${order.detail}"></p>
+
+            </div>
+        </table>
+    </div>
+</div>
+</body>
