@@ -2,6 +2,7 @@ package by.itacademy.service;
 
 import by.itacademy.dao.ProductDao;
 import by.itacademy.dto.FilterDto;
+import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.service.common.BaseServiceImpl;
 import org.apache.log4j.Logger;
@@ -29,9 +30,14 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     private CharacteristicService characteristicService;
 
     @Override
-    public List<Product> getByCategoryName(String name) {
+    public List<Product> getByCategoryName(String name, int pageNumber) {
         LOGGER.info("invocation: getByCategoryName parameters: " + name);
-        return productDao.getByCategoryName(name);
+        return productDao.getByCategoryName(name, pageNumber);
+    }
+
+    @Override
+    public Integer getTotalPage(Category category) {
+        return productDao.getTotalPage(category);
     }
 
     @Override
@@ -56,7 +62,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
             addPriceParams(detailIdValueMap, filterDto.getPriceFrom(), filterDto.getPriceTo());
         }
 
-        List<Product> resultProducts = productDao.testCriteria(detailIdValueMap)
+        List<Product> resultProducts = productDao.getWithFilter(detailIdValueMap)
                 .stream()
                 .map(i -> productDao.getByID(i))
                 .collect(Collectors.toList());

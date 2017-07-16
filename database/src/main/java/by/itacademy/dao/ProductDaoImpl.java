@@ -1,6 +1,7 @@
 package by.itacademy.dao;
 
 import by.itacademy.dao.common.BaseDaoImpl;
+import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Product;
 import org.hibernate.query.NativeQuery;
 import org.springframework.stereotype.Repository;
@@ -14,13 +15,29 @@ import java.util.stream.Collectors;
 @Repository
 public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
 
+    private static final int countProductInPage = 3;
+
     @Override
-    public List<Product> getByCategoryName(String categoryName) {
+    public List<Product> getByCategoryName(String categoryName, int pageNumber) {
         List<Product> products = getSessionFactory().getCurrentSession()
                 .createQuery("select p from Product p where p.category.name=:name", Product.class)
                 .setParameter("name", categoryName)
+                .setFirstResult(countProductInPage * ((pageNumber - 2) + 1))
+                .setMaxResults(countProductInPage)
                 .getResultList();
+        System.out.println("PRODUCTS: ");
+        products.forEach(System.out::println);
         return products;
+    }
+
+    @Override
+    public Integer getTotalPage(Category category) {
+        Long countProducts = getSessionFactory().getCurrentSession()
+                .createQuery("select count(p) from Product p where p.category.id=:id", Long.class)
+                .setParameter("id", category.getId())
+                .getSingleResult();
+        int pages = Math.toIntExact(countProducts) / countProductInPage;
+        return pages == 0 ? (pages) : (pages + 1);
     }
 
     @Override
@@ -35,7 +52,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
     }
 
     @Override
-    public List<Long> testCriteria(Map<Long, List<String>> detailValueMap) {
+    public List<Long> getWithFilter(Map<Long, List<String>> detailValueMap) {
 
         StringBuilder nativeQuery = new StringBuilder("select p.id as id from products p " +
                 "LEFT JOIN characteristics c1 ON p.id=c1.product_id AND c1.detail_id=1 " +

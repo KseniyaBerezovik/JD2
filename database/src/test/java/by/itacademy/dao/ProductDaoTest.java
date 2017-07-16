@@ -47,7 +47,7 @@ public class ProductDaoTest extends BaseDaoTest<Product> {
     @Test
     public void testGetByCategoryName() {
         getDataImporter().importData();
-        List<Product> products = productDao.getByCategoryName("Мобильные телефоны");
+        List<Product> products = productDao.getByCategoryName("Мобильные телефоны", 0);
 
         assertThat(products, hasSize(1));
         assertThat(products.get(0).getName(), is("Xiaomi Redmi 3"));

@@ -4,9 +4,11 @@ import by.itacademy.dto.AmountDto;
 import by.itacademy.dto.CartDto;
 import by.itacademy.dto.DetailDto;
 import by.itacademy.entity.orderEntity.Cart;
+import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.entity.userEntity.User;
 import by.itacademy.service.CartService;
+import by.itacademy.service.CategoryService;
 import by.itacademy.service.ProductService;
 import by.itacademy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,14 @@ import java.util.List;
 
 @Controller
 public class CartController {
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @ModelAttribute("categories")
+    public List<Category> addCategories() {
+        return categoryService.findAll();
+    }
 
     @ModelAttribute("currentUser")
     public UserDetails getCurrentUser(Authentication authentication) {

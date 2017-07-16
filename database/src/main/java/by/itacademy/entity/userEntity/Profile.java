@@ -15,4 +15,8 @@ public class Profile extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

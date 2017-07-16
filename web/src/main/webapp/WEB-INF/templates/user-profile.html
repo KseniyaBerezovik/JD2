@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Profile</title>
+    <div th:insert="~{fragments :: connect}"/>
+</head>
+<body class="lightRed">
+<div th:insert="~{fragments :: header}"></div>
+<div class="myContent">
+    <div class="productContent">
+
+        <div th:insert="~{fragments :: navbar-default}"></div>
+
+        <div class="col-lg-8 col-lg-offset-2">
+            <p th:if="${profile == null}">Ваш профайл еще не заполнен</p>
+            <p th:if="${profile != null}">У вас есть профайл</p>
+        </div>
+    </div>
+</div>
+</body>

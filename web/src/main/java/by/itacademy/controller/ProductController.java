@@ -17,11 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProductController {
@@ -69,6 +65,7 @@ public class ProductController {
                                         @RequestParam(value = "priceFrom", required = false) String priceFrom,
                                         @RequestParam(value = "priceTo", required = false) String priceTo,
                                         @RequestParam(value = "os", required = false) List<String> os,
+                                        @RequestParam(value = "page", defaultValue = "1", required = false) Integer pageNumber,
                                         Model model) {
         Category category = categoryService.getByID(id);
         model.addAttribute("category", category);
@@ -85,10 +82,15 @@ public class ProductController {
         List<Product> products;
 
         if(allParamsUndefined) {
-            products = productService.getByCategoryName(category.getName());
+            products = productService.getByCategoryName(category.getName(), pageNumber);
+            model.addAttribute("totalPage", productService.getTotalPage(category));
+            model.addAttribute("currentPage", pageNumber);
         } else {
             FilterDto filterDto = new FilterDto(years, yearFrom, yearTo, priceFrom, priceTo, os);
             products = productService.getByFilter(filterDto);
+            int totalPage = (products.size() / 3) > 0 ? products.size() / 3 : products.size() / 3 + 1;
+            model.addAttribute("totalPage", totalPage);
+            model.addAttribute("currentPage", 1);
         }
         model.addAttribute("products", products);
         return "main_page";

@@ -11,8 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 public interface ProductDao extends BaseDao<Product> {
-    List<Product> getByCategoryName(String categoryName);
+    List<Product> getByCategoryName(String categoryName, int pageNumber);
+    Integer getTotalPage(Category category);
     Integer getNextImageNumber();
-    List<Long> testCriteria(Map<Long, List<String>> detailValueMap);
+    List<Long> getWithFilter(Map<Long, List<String>> detailValueMap);
 
 }

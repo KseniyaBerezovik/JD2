@@ -42,7 +42,7 @@ public class ReviewDaoTest extends BaseDaoTest<Review> {
     @Test
     public void testGetByProduct() {
         getDataImporter().importData();
-        Product product = productDao.getByCategoryName("Мобильные телефоны").get(0);
+        Product product = productDao.getByCategoryName("Мобильные телефоны", 0).get(0);
         System.out.println("PRODUCT: " + product);
 
         List<Review> reviews = getReviews(reviewDao, product);

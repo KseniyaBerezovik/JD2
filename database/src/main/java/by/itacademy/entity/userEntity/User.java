@@ -19,10 +19,6 @@ public class User extends BaseEntity {
     @Column(name = "password")
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
-
     @Embedded
     private Address address;
 

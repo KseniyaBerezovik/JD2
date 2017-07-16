@@ -122,8 +122,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -131,14 +129,105 @@
 
                 <div class="row">
                     <nav aria-label="Page navigation" style="text-align: center;">
-                        <ul class="pagination">
-                            <li th:each="page : ${pages}">
-                                <a th:href="@{'/main_page/' + ${page} + '/' + ${category.id}}"
-                                   th:text="${page}"></a>
+                        <ul class="pagination" style="display: inline-block; float: none;">
+                            <li th:class="${currentPage eq 1} ? 'disabled' : ''">
+                                <a th:if="${not (currentPage eq 1)}"
+                                   th:href="@{'/category/' + ${category.id} + '?page=' + ${currentPage - 1}}"
+                                   aria-label="Previous">
+                                    &laquo;
+                                </a>
+                                <a th:if="${currentPage eq 1}"
+                                   href="javascript:void(0);"
+                                   aria-label="Previous">
+                                    &laquo;
+                                </a>
+                            </li>
+
+                            <li th:each="current : ${#numbers.sequence(1, totalPage)}" th:class="${current eq currentPage} ? 'active' : ''">
+                            <a th:if="${currentPage eq current}" href="javascript:void(0);">
+                                <span th:text="${current}"></span>
+                            </a>
+                            <a th:if="${not (currentPage eq current)}"
+                               th:href="@{'/category/' + ${category.id} + '?page=' + ${current}}">
+                                <span th:text="${current}"></span>
+                            </a>
+
+                            </li>
+                            <li th:class="${currentPage eq totalPage} ? 'disabled' : ''">
+                                <a th:if="${not (currentPage eq totalPage)}"
+                                   th:href="@{'/category/' + ${category.id} + '?page=' + ${currentPage + 1}}"
+                                   aria-label="Next">
+                                    &raquo;
+                                </a>
+                                <a th:if="${(currentPage eq totalPage)}" href="javascript:void(0);"
+                                   aria-label="Next">
+                                    &raquo;
+                                </a>
                             </li>
                         </ul>
                     </nav>
                 </div>
+
+                <!--<div class="row">-->
+                    <!--<nav aria-label="Page navigation" style="text-align: center;">-->
+                        <!--<ul class="pagination" style="display: inline-block; float: none;">-->
+                            <!--<li th:class="${contactsPage.number eq 0} ? 'disabled' : ''">-->
+                                <!--<a th:if="${not contactsPage.firstPage}" th:href="@{${'/contacts'}(page=${contactsPage.number-1},size=${contactsPage.size})}">Previous</a>-->
+                                <!--<a th:if="${contactsPage.firstPage}" href="javascript:void(0);">Previous</a>-->
+                            <!--</li>-->
+
+                            <!--<li th:eacurrentPagegeNo : ${#numbers.sequence(0, contactsPage.totalPages - 1)}" th:class="${contactsPage.numbercurrentPagegeNo}? 'active' : ''">-->
+                                <!--<a th:if="${contactsPage.number currentPagegeNo}" href="javascript:void(0);">-->
+                                    <!--<span th:textcurrentPagegeNo + 1}"></span>-->
+                                <!--</a>-->
+                                <!--<a th:if="${not (contactsPage.number currentPagegeNo)}" th:href="@{${'/contacts'}(pagcurrentPagegeNo},size=${contactsPage.size})}">-->
+                                    <!--<span th:textcurrentPagegeNo + 1}"></span>-->
+                                <!--</a>-->
+
+                            <!--</li>-->
+                            <!--<li th:class="${contactsPage.number + 1 ge contactsPage.totalPages} ? 'disabled' : ''">-->
+                                <!--<a th:if="${not contactsPage.lastPage}" th:href="@{${'/contacts'}(page=${contactsPage.number+1},size=${contactsPage.size})}">Next</a>-->
+                                <!--<a th:if="${contactsPage.lastPage}" href="javascript:void(0);">Next</a>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</nav>-->
+                <!--</div>-->
+
+                <!--<div class="vm-pagination pagination pagination-mini pagination-centered">-->
+                    <!--<ul class="pagination-list">-->
+                        <!--<li th:class="${firstResult != maxResults} ? '' : 'disabled'">-->
+                            <!--<a class="link-text" th:href="@{/ProductsInCategory/{id}/{firstResult}/{maxResults}-->
+                                                         <!--(id=${category.id}, firstResult=0, maxResults=${maxResults})}" >Начало</a>-->
+                        <!--</li>-->
+                        <!--<li th:class="${firstResult != maxResults} ? '' : 'disabled'">-->
+                            <!--<a class="link-text" th:href="@{/ProductsInCategory/{id}/{firstResult}/{maxResults}-->
+                                                         <!--(id=${category.id},-->
+                                                         <!--firstResult=${firstResult} < ${maxResults * 2} ? 0 : ${firstResult}-${maxResults}*2,-->
+                                                         <!--maxResults=${maxResults})}">Предыдущая</a>-->
+                        <!--</li>-->
+                        <!--<li th:each='page : ${catalogOfPages}' th:class="${page == (firstResult / maxResults)}? 'disabled' : ''">-->
+                            <!--<a class="link-text" th:href="@{/ProductsInCategory/{id}/{firstResult}/{maxResults}-->
+                                                         <!--(id=${category.id},-->
+                                                         <!--firstResult=${page * maxResults - maxResults},-->
+                                                         <!--maxResults=${maxResults})}" th:text='${page}'>1</a>-->
+                        <!--</li>-->
+                        <!--<li th:class="${(firstResult / maxResults) != catalogOfPages.size()} ? '' : 'disabled'">-->
+                            <!--<a class="link-text" th:href="@{/ProductsInCategory/{id}/{firstResult}/{maxResults}-->
+                                                         <!--(id=${category.id},-->
+                                                         <!--firstResult=${firstResult} < ${count} ? ${firstResult} : ${firstResult}-${maxResults},-->
+                                                         <!--maxResults=${maxResults})}" >Следующая</a></li>-->
+
+                        <!--<li th:class="${(firstResult / maxResults) != catalogOfPages.size()} ? '' : 'disabled'">-->
+                            <!--<a class="link-text" th:href="@{/ProductsInCategory/{id}/{firstResult}/{maxResults}-->
+                                                         <!--(id=${category.id},-->
+                                                         <!--firstResult=${count % maxResults} == ${0} ? ${count - maxResults} : ${count - count % maxResults},-->
+                                                         <!--maxResults=${maxResults})}" >Конец</a></li>-->
+                    <!--</ul>-->
+                    <!--<span style="float:right"-->
+                          <!--th:text="'Страница ' + ${firstResult / maxResults} + ' из '-->
+                                          <!--+ ${catalogOfPages.size()}">Страница 1 из 2</span>-->
+                <!--</div>-->
+
             </div>
         </div>
     </div>

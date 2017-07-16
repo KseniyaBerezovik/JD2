@@ -1,23 +1,22 @@
 package by.itacademy.controller;
 
-import by.itacademy.dao.OrderContentDao;
 import by.itacademy.entity.orderEntity.Order;
 import by.itacademy.entity.orderEntity.OrderContent;
+import by.itacademy.entity.productEntity.Category;
+import by.itacademy.entity.userEntity.Profile;
 import by.itacademy.entity.userEntity.User;
-import by.itacademy.service.OrderContentService;
-import by.itacademy.service.OrderService;
-import by.itacademy.service.UserService;
-import lombok.AllArgsConstructor;
+import by.itacademy.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path = "/user")
@@ -31,6 +30,28 @@ public class UserController {
 
     @Autowired
     private OrderContentService orderContentService;
+
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private ProfileService profileService;
+
+    @ModelAttribute("categories")
+    public List<Category> addCategories() {
+        return categoryService.findAll();
+    }
+
+    @ModelAttribute("countProductInCart")
+    public Integer getCountProductInCar() {
+        String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getByLogin(userLogin);
+        return cartService.getCountProductsInCart(user);
+    }
+
     @GetMapping("/orders")
     public String addOrders(Model model) {
         return "user-orders";
@@ -57,5 +78,16 @@ public class UserController {
         model.addAttribute("contents", contents);
         model.addAttribute("orders", orders);
         return "my-orders";
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getByLogin(userLogin);
+        Profile profile = profileService.getByUser(user);
+        if (profile != null) {
+            model.addAttribute("profile", profile);
+        }
+        return "user-profile";
     }
 }

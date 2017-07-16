@@ -34,7 +34,7 @@
             <br>
         </div>
 
-        <div>
+        <div th:if="${carts.size() > 0}">
             <a class="btn btn-default" type="button" th:href="@{/user/create-order}">
                 Оформить заказ
             </a>
