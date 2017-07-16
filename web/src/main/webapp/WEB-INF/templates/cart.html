@@ -12,33 +12,88 @@
 
         <div th:insert="~{fragments :: navbar-default}"></div>
 
-        <div th:object="${carts}">
-            <div th:each="cart : ${carts}">
-                <div class="form-group col-lg-10">
-                    <p th:text="${cart.product.name} + ' в количестве: ' + ${cart.amount}"></p>
-                    <select size="1" name="amount" th:id="'amount' + ${cart.product.id}">
-                        <option th:each="i : ${#numbers.sequence(1, cart.amount)}"
-                                th:value="${i}"
-                                th:text="${i}">
-                        </option>
-                    </select>
-                    <div class="btn-group" role="group">
-                        <div th:value="${cart.product.id}" th:id="'productId' + ${cart.product.id}"></div>
-                        <button class="btn btn-default" type="button"
-                                th:onclick="'deleteFromCart(\'' + ${cart.product.id} + '\');'">
-                            Удалить из корзины
-                        </button>
+            <div th:if="${empty}">
+                <h3>Ваша корзина пуста</h3>
+            </div>
+
+            <div th:unless="${empty}">
+                <div class="container-fluid">
+                    <div class="row" th:object="${carts}">
+                        <div th:each="cart : ${carts}">
+                            <div class="col-lg-6 col-lg-offset-1 cart-content">
+                                <div class="row">
+                                    <div class="col-lg-6 left">
+                                        <p th:text="${cart.product.name} + ' в количестве: ' + ${cart.amount}"></p>
+                                    </div>
+                                    <div class="col-lg-1 col-lg-offset-5">
+                                        <p class="right" th:text="${cart.product.price}">350$</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <img th:src="@{'/resources/images/' + ${cart.product.image}}" class="cart-img">
+                                    </div>
+                                    <div class="col-lg-3 col-lg-offset-7">
+                                        <div class="col lg-12" style="margin-top: 20px">
+                                            <div class="row">
+                                                <select size="1" name="amount" th:id="'amount' + ${cart.product.id}" style="width: 160px">
+                                                    <option th:each="i : ${#numbers.sequence(1, cart.amount)}"
+                                                            th:value="${i}"
+                                                            th:text="${i}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="row">
+                                                <div th:value="${cart.product.id}" th:id="'productId' + ${cart.product.id}"></div>
+                                                <button th:onclick="'deleteFromCart(\'' + ${cart.product.id} + '\');'"
+                                                        class="btn btn-danger btn-sm" style="margin-top: 5px; width: 160px">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                    Удалить из корзины</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px">
+                        <div class="col-lg-1 col-lg-offset-4"></div>
+                        <a th:href="@{/user/create-order}" class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart"></span> Оформить заказ</a>
+                        <a href="#" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Очистить всю корзину</a>
                     </div>
                 </div>
             </div>
-            <br>
-        </div>
 
-        <div th:if="${carts.size() > 0}">
-            <a class="btn btn-default" type="button" th:href="@{/user/create-order}">
-                Оформить заказ
-            </a>
-        </div>
+
+
+        <!--<div th:object="${carts}">-->
+            <!--<div th:each="cart : ${carts}">-->
+                <!--<div class="form-group col-lg-10">-->
+                    <!--<p th:text="${cart.product.name} + ' в количестве: ' + ${cart.amount}"></p>-->
+                    <!--<select size="1" name="amount" th:id="'amount' + ${cart.product.id}">-->
+                        <!--<option th:each="i : ${#numbers.sequence(1, cart.amount)}"-->
+                                <!--th:value="${i}"-->
+                                <!--th:text="${i}">-->
+                        <!--</option>-->
+                    <!--</select>-->
+                    <!--<div class="btn-group" role="group">-->
+                        <!--<div th:value="${cart.product.id}" th:id="'productId' + ${cart.product.id}"></div>-->
+                        <!--<button class="btn btn-default" type="button"-->
+                                <!--th:onclick="'deleteFromCart(\'' + ${cart.product.id} + '\');'">-->
+                            <!--Удалить из корзины-->
+                        <!--</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<br>-->
+        <!--</div>-->
+
+        <!--<div th:if="${carts.size() > 0}">-->
+            <!--<a class="btn btn-default" type="button" th:href="@{/user/create-order}">-->
+                <!--Оформить заказ-->
+            <!--</a>-->
+        <!--</div>-->
 
     </div>
 </div>

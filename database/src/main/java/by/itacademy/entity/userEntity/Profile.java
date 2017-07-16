@@ -1,5 +1,6 @@
 package by.itacademy.entity.userEntity;
 
+import by.itacademy.entity.otherEntity.Address;
 import by.itacademy.entity.otherEntity.BaseEntity;
 import lombok.Data;
 
@@ -15,6 +16,12 @@ public class Profile extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;
+
+    @Enumerated
+    private Address address;
+
+    @Column(name = "email")
+    private String email;
 
     @OneToOne
     @JoinColumn(name = "user_id")

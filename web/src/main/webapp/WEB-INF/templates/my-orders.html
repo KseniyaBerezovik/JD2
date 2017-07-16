@@ -12,37 +12,40 @@
 
         <div th:insert="~{fragments :: navbar-default}"></div>
 
-        <div th:each="order : ${orders}">
-            <div th:each="content : ${contents}">
-                <div class="row" th:if="${order.id} == ${content[0].order.id}">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <h4>Мои заказы</h4>
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                            <tr>
-                                <th colspan="2" th:text="'Заказ №' + ${order.id}"/>
-                            </tr>
-                            </thead>
-                            <thead>
-                            <tr>
-                                <th>Продукт</th>
-                                <th>Количество</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="cont : ${content}">
-                                <td>
-                                    <a th:href="@{'/product_info/' + ${cont.product.id}}"
-                                       th:text="${cont.product.name}"></a>
-                                </td>
-                                <td th:text="${cont.amount}"/>
-                            </tr>
-                            </tbody>
-                        </table>
+        <div th:if="${empty}">
+            <h3>У вас нет заказов</h3>
+        </div>
+
+        <div th:unless="${empty}">
+            <h4>Мои заказы</h4>
+            <div th:each="order : ${orders}">
+                <div th:each="content : ${contents}">
+                    <div class="row" th:if="${order.id} == ${content[0].order.id}">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="2" th:text="'Заказ №' + ${order.id}"/>
+                                </tr>
+                                </thead>
+                                <thead>
+                                <tr>
+                                    <th>Продукт</th>
+                                    <th>Количество</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="cont : ${content}">
+                                    <td>
+                                        <a th:href="@{'/product_info/' + ${cont.product.id}}"
+                                           th:text="${cont.product.name}"></a>
+                                    </td>
+                                    <td th:text="${cont.amount}"/>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <!--<div th:each="cont : ${content}">-->
-                    <!--<p th:text="${cont.product.name} + ' : ' + ${cont.amount}"></p>-->
-                    <!--</div>-->
                 </div>
             </div>
         </div>

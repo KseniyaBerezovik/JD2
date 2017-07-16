@@ -15,6 +15,11 @@
         <div class="col-lg-8 col-lg-offset-2">
             <p th:if="${profile == null}">Ваш профайл еще не заполнен</p>
             <p th:if="${profile != null}">У вас есть профайл</p>
+
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" th:href="@{/user/create-profile}">Заполнить профайл</a>
+            </div>
+
         </div>
     </div>
 </div>

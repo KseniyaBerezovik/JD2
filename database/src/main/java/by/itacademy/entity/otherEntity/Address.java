@@ -15,5 +15,5 @@ public class Address {
     @Column(name = "house")
     private String house;
     @Column(name = "flat")
-    private Integer flat;
+    private String flat;
 }

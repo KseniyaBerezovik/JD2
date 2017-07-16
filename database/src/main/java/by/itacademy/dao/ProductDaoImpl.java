@@ -15,10 +15,8 @@ import java.util.stream.Collectors;
 @Repository
 public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
 
-    private static final int countProductInPage = 3;
-
     @Override
-    public List<Product> getByCategoryName(String categoryName, int pageNumber) {
+    public List<Product> getByCategoryName(String categoryName, int pageNumber, int countProductInPage) {
         List<Product> products = getSessionFactory().getCurrentSession()
                 .createQuery("select p from Product p where p.category.name=:name", Product.class)
                 .setParameter("name", categoryName)
@@ -31,13 +29,14 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
     }
 
     @Override
-    public Integer getTotalPage(Category category) {
+    public Integer getTotalPage(Category category, int countProductInPage) {
         Long countProducts = getSessionFactory().getCurrentSession()
                 .createQuery("select count(p) from Product p where p.category.id=:id", Long.class)
                 .setParameter("id", category.getId())
                 .getSingleResult();
-        int pages = Math.toIntExact(countProducts) / countProductInPage;
-        return pages == 0 ? (pages) : (pages + 1);
+        int pageCount = Math.toIntExact(countProducts) / countProductInPage;
+        int pages = Math.toIntExact(countProducts) % countProductInPage;
+        return pages == 0 ? (pageCount) : (pageCount + 1);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
     }
 
     @Override
-    public List<Long> getWithFilter(Map<Long, List<String>> detailValueMap) {
+    public List<Long> getWithFilter(Map<Long, List<String>> detailValueMap, int pageNumber, int countProductInPage) {
 
         StringBuilder nativeQuery = new StringBuilder("select p.id as id from products p " +
                 "LEFT JOIN characteristics c1 ON p.id=c1.product_id AND c1.detail_id=1 " +
@@ -82,7 +81,9 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
         }
         String toAdding = String.join(" AND ", forAddingToQuery);
 
-        String fullNativeQuery = nativeQuery + toAdding;
+        String fullNativeQuery = nativeQuery + toAdding +
+                " LIMIT " + countProductInPage + " OFFSET "  + countProductInPage * ((pageNumber - 2) + 1);
+
         System.out.println("QUERY: " + fullNativeQuery);
 
         NativeQuery query = getSessionFactory().getCurrentSession().createNativeQuery(fullNativeQuery);
@@ -95,5 +96,11 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
         }
 
         return (List<Long>) query.list().stream().map(i -> Long.valueOf(Objects.toString(i))).collect(Collectors.toList());
+    }
+
+    @Override
+    public Integer getTotalPageWithFilter(Map<Long, List<String>> detailValueMap, int countProductInPage) {
+        int productCount = getWithFilter(detailValueMap, 1, 100).size();
+        return productCount % countProductInPage == 0 ? productCount / countProductInPage : productCount / countProductInPage + 1;
     }
 }

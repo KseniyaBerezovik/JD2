@@ -3,6 +3,7 @@ package by.itacademy.controller;
 import by.itacademy.entity.orderEntity.Order;
 import by.itacademy.entity.orderEntity.OrderContent;
 import by.itacademy.entity.productEntity.Category;
+import by.itacademy.entity.productEntity.Product;
 import by.itacademy.entity.userEntity.Profile;
 import by.itacademy.entity.userEntity.User;
 import by.itacademy.service.*;
@@ -10,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,13 +68,16 @@ public class UserController {
         String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getByLogin(userLogin);
         List<Order> orders = orderService.getByUser(user);
-        List<List<OrderContent>> contents = new ArrayList<>();
-        for(Order order : orders) {
-            contents.add(orderContentService.getByOrder(order));
+        if(orders.size() == 0){
+            model.addAttribute("empty", true);
+        } else {
+            List<List<OrderContent>> contents = new ArrayList<>();
+            for(Order order : orders) {
+                contents.add(orderContentService.getByOrder(order));
+            }
+            model.addAttribute("contents", contents);
+            model.addAttribute("orders", orders);
         }
-        System.out.println("CONTENTS: " + contents);
-        model.addAttribute("contents", contents);
-        model.addAttribute("orders", orders);
         return "my-orders";
     }
 
@@ -89,5 +90,17 @@ public class UserController {
             model.addAttribute("profile", profile);
         }
         return "user-profile";
+    }
+
+    @GetMapping("/create-profile")
+    public String createProfile(Model model) {
+        model.addAttribute("profile", new Profile());
+        return "user-create-profile";
+    }
+
+    @PostMapping("/create-profile")
+    public String addProfile(Profile profile) {
+        System.out.println("PROFILE: " + profile);
+        return "redirect:profile";
     }
 }

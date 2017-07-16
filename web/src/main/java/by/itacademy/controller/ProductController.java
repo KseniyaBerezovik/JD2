@@ -87,10 +87,10 @@ public class ProductController {
             model.addAttribute("currentPage", pageNumber);
         } else {
             FilterDto filterDto = new FilterDto(years, yearFrom, yearTo, priceFrom, priceTo, os);
-            products = productService.getByFilter(filterDto);
-            int totalPage = (products.size() / 3) > 0 ? products.size() / 3 : products.size() / 3 + 1;
+            products = productService.getByFilter(filterDto, pageNumber);
+            int totalPage = productService.getTotalPageWithFilter(filterDto);
             model.addAttribute("totalPage", totalPage);
-            model.addAttribute("currentPage", 1);
+            model.addAttribute("currentPage", pageNumber);
         }
         model.addAttribute("products", products);
         return "main_page";

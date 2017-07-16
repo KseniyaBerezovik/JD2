@@ -63,7 +63,11 @@ public class CartController {
         String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getByLogin(userLogin);
         List<Cart> carts = cartService.getByUser(user);
-        model.addAttribute("carts", carts);
+        if(carts.size() == 0) {
+            model.addAttribute("empty", true);
+        } else {
+            model.addAttribute("carts", carts);
+        }
         return "cart";
     }
 
