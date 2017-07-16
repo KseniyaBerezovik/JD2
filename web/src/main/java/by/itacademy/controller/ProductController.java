@@ -97,10 +97,15 @@ public class ProductController {
     }
 
     @GetMapping("/product_info/{id}")
-    public String getProductInfo(@PathVariable("id") Long id, Model model) {
+    public String getProductInfo(@PathVariable("id") Long id,
+                                 @RequestParam(value = "review", required = false) boolean isOnlyReview,
+                                 Model model) {
         Product product = productService.getByID(id);
         List<Review> reviews = reviewService.getByProduct(product);
         List<Characteristic> characteristics = characteristicService.getByProduct(product);
+        if(isOnlyReview){
+            model.addAttribute("review", true);
+        }
         model.addAttribute("product", product);
         model.addAttribute("reviews", reviews);
         model.addAttribute("characteristics", characteristics);

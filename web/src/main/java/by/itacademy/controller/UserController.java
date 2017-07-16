@@ -94,13 +94,25 @@ public class UserController {
 
     @GetMapping("/create-profile")
     public String createProfile(Model model) {
-        model.addAttribute("profile", new Profile());
+        String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getByLogin(userLogin);
+        Profile profile = profileService.getByUser(user);
+        model.addAttribute("profile", profile != null ? profile : new Profile());
         return "user-create-profile";
     }
 
     @PostMapping("/create-profile")
     public String addProfile(Profile profile) {
-        System.out.println("PROFILE: " + profile);
+        String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getByLogin(userLogin);
+        profile.setUser(user);
+        Profile currentProfile = profileService.getByUser(user);
+        if(currentProfile != null) {
+            profile.setId(currentProfile.getId());
+            profileService.update(profile);
+        } else {
+            profileService.save(profile);
+        }
         return "redirect:profile";
     }
 }

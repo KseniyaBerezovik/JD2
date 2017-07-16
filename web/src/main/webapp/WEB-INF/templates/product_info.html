@@ -12,47 +12,85 @@
 <div class="myContent">
     <div class="productContent">
 
-        <!--<nav class="navbar navbar-default">-->
-            <!--<div class="navContainer">-->
-                <!--<div class="navbar-form navbar-left navCategories" th:each="category : ${categories}">-->
-                    <!--<div class="navbar-header">-->
-                        <!--<a class="navbar-brand" th:href="@{'/category/' + ${category.name}}"-->
-                           <!--th:text="${category.name}">Мобильные телефоны</a>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</nav>-->
-
         <div th:insert="~{fragments :: navbar-default}"></div>
 
-        <div th:object="${product}">
-    <p th:text="${product.name}"></p>
-    <p th:text="${product.description}"></p>
-    <p th:text="${product.mark}"></p>
-    <p th:text="${product.price}"></p>
-    <br>
-    <div th:each="chracteristic : ${characteristics}">
-        <p th:text="${chracteristic.detail.name} + ': ' + ${chracteristic.value}"></p>
-    </div>
-    <br>
-    <div th:each="review : ${reviews}">
-        <p th:text="${review.owner.name} + ' ' + ${review.owner.surname}"></p>
-        <p th:text="${review.content}"></p>
-    </div>
-</div>
-<form th:action="@{'/product/' + ${product.id}}" method="post">
-    <div class="form-group">
-        <input class="form-control" placeholder="Ваш отзыв" name="content" id="content" type="text" required/>
-    </div>
-    <div class="btn-group btn-group-justified" role="group">
-        <div class="btn-group btn-group-justified" role="group">
-            <div class="btn-group" role="group">
-                <button type="submit" class="btn btn-success" text="Сохранить"></button>
+        <div class="container">
+            <div>
+
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" th:class="${review eq true} ? '' : 'active'">
+                        <a href="#detail" aria-controls="detail" role="tab" data-toggle="tab">Подробности</a>
+                    </li>
+                    <li role="presentation" th:class="${review eq true} ? 'active' : ''">
+                        <a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Отзывы</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="detail"
+                         th:object="${product}">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h2 th:text="${product.name}"></h2>
+                            </div>
+                            <div class="col-lg-2 col-lg-offset-4">
+                                <h2 th:text="${product.price} + '$'"></h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <img th:src="@{'/resources/images/' + ${product.image}}"
+                                     style="width: 110px; height: 200px;">
+                            </div>
+                            <div class="col-lg-6">
+                                <h3 th:text="${product.description}"></h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table class="table table-bordered table-hover table-striped"
+                                   style="margin-top: 40px">
+                                <tbody>
+                                <tr th:each="chracteristic : ${characteristics}">
+                                    <td th:text="${chracteristic.detail.name}"></td>
+                                    <td th:text="${chracteristic.value}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="reviews">
+                        <div class="row review">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <div class="panel panel-default" th:each="review : ${reviews}">
+                                    <div class="panel-heading">
+                                        <span class="label label-primary"
+                                              th:text="${review.owner.name} + ' ' + ${review.owner.surname}">
+
+                                        </span>
+                                    </div>
+                                    <div class="panel-body" th:text="${review.content}"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form th:action="@{'/product/' + ${product.id}}" method="post">
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Ваш отзыв" name="content" id="content"
+                                       type="text" required/>
+                            </div>
+                            <div class="btn-group btn-group-justified" role="group">
+                                <div class="btn-group btn-group-justified" role="group">
+                                    <div class="btn-group" role="group">
+                                        <button type="submit" class="btn btn-default">Сохранить</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</form>
-    </div>
 </div>
-
 </body>

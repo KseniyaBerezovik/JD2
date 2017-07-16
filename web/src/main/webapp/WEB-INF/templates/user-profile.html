@@ -12,13 +12,54 @@
 
         <div th:insert="~{fragments :: navbar-default}"></div>
 
-        <div class="col-lg-8 col-lg-offset-2">
-            <p th:if="${profile == null}">Ваш профайл еще не заполнен</p>
-            <p th:if="${profile != null}">У вас есть профайл</p>
-
-            <div class="btn-group" role="group">
-                <a class="btn btn-primary" th:href="@{/user/create-profile}">Заполнить профайл</a>
+        <div class="col-lg-5 col-lg-offset-3">
+            <div th:if="${profile == null}">
+                <p>Ваш профайл еще не заполнен</p>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary" th:href="@{/user/create-profile}">Заполнить профайл</a>
+                </div>
             </div>
+
+            <div th:if="${profile != null}">
+                <h3>Профайл</h3>
+                <table class="table table-bordered table-hover table-striped"
+                       style="margin-top: 40px">
+                    <tbody>
+                    <tr>
+                        <td>Город</td>
+                        <td th:text="${profile.address.city}"></td>
+                    </tr>
+                    <tr>
+                        <td>Улица</td>
+                        <td th:text="${profile.address.street}"></td>
+                    </tr>
+                    <tr>
+                        <td>Дом</td>
+                        <td th:text="${profile.address.house}"></td>
+                    </tr>
+                    <tr>
+                        <td>Квартира</td>
+                        <td th:text="${profile.address.flat}"></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td th:text="${profile.email}"></td>
+                    </tr>
+                    <tr>
+                        <td>Телефон</td>
+                        <td th:text="${profile.telephone}"></td>
+                    </tr>
+                    <tr>
+                        <td>Пол</td>
+                        <td th:text="${profile.gender eq 'MALE'} ? 'Мужской' : 'Женский'"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary" th:href="@{/user/create-profile}">Редактировать</a>
+                </div>
+            </div>
+
 
         </div>
     </div>
