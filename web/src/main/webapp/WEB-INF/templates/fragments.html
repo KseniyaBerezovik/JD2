@@ -46,14 +46,20 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false"
-                               th:text="${#authentication.getPrincipal().getUsername()}">Profile <span
+                               th:text="${#authentication.getPrincipal().getUsername()}"><span
                                     class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="/logout">Logout</a></li>
                                 <li><a href="/user/profile">Profile</a></li>
                                 <li><a href="/user/my-orders">My orders</a></li>
-                                <li><a href="#">Settings</a></li>
                             </ul>
+                        </li>
+
+                        <li sec:authorize="${hasAuthority('ADMIN')}">
+                            <a th:href="@{/admin/add-product/first}">
+                                <span class="glyphicon glyphicon-shopping-cartContent" aria-hidden="true"></span>
+                                Добавление продукта
+                            </a>
                         </li>
 
                         <li sec:authorize="${hasAuthority('ADMIN')}">
@@ -61,6 +67,17 @@
                                 <span class="glyphicon glyphicon-shopping-cartContent" aria-hidden="true"></span>
                                 Пользователи
                             </a>
+                        </li>
+
+                        <li class="dropdown" sec:authorize="${hasAuthority('ADMIN')}">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false"
+                               th:text="${#authentication.getPrincipal().getUsername()}"><span
+                                    class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
                         </li>
 
                     </ul>

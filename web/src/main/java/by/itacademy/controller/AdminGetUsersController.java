@@ -1,16 +1,20 @@
 package by.itacademy.controller;
 
 import by.itacademy.entity.orderEntity.Order;
+import by.itacademy.entity.orderEntity.OrderContent;
+import by.itacademy.entity.productEntity.Category;
+import by.itacademy.entity.userEntity.Profile;
 import by.itacademy.entity.userEntity.User;
-import by.itacademy.service.OrderService;
-import by.itacademy.service.UserService;
+import by.itacademy.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,6 +27,20 @@ public class AdminGetUsersController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private ProfileService profileService;
+
+    @Autowired
+    private OrderContentService orderContentService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @ModelAttribute("categories")
+    public List<Category> addCategories() {
+        return categoryService.findAll();
+    }
+
     @GetMapping("/get-all")
     public String getAllUsers(Model model) {
         List<User> users = userService.findAll();
@@ -33,16 +51,29 @@ public class AdminGetUsersController {
     @GetMapping("/see-profile/{id}")
     public String seeProfile(@PathVariable("id") Long id, Model model) {
         User user = userService.getByID(id);
+        Profile profile = profileService.getByUser(user);
+        if(profile != null) {
+            model.addAttribute("profile", profile);
+        }
         model.addAttribute("user", user);
-        return "admin-get-user-profile";
+        return "user-profile";
     }
 
     @GetMapping("/all-orders/{userId}")
     public String seeOrders(@PathVariable("userId") Long userId, Model model) {
         User user = userService.getByID(userId);
+        model.addAttribute("user", user);
         List<Order> orders = orderService.getByUser(user);
-        model.addAttribute("orders", orders);
-        System.out.println("ORDER DETAIL: " + orders.get(0).getDetail());
-        return "admin-get-orders";
+        if(orders.isEmpty()){
+            model.addAttribute("empty", true);
+        } else {
+            List<List<OrderContent>> contents = new ArrayList<>();
+            for(Order order : orders) {
+                contents.add(orderContentService.getByOrder(order));
+            }
+            model.addAttribute("contents", contents);
+            model.addAttribute("orders", orders);
+        }
+        return "my-orders";
     }
 }

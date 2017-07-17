@@ -26,7 +26,7 @@
                                     <p th:text="${cart.product.name} + ' в количестве: ' + ${cart.amount}"></p>
                                 </div>
                                 <div class="col-lg-1 col-lg-offset-5">
-                                    <p class="right" th:text="${cart.product.price}">350$</p>
+                                    <p class="right" th:text="${cart.product.price} + '$'"></p>
                                 </div>
                             </div>
                             <div class="row">
@@ -64,7 +64,7 @@
                     <div class="col-lg-1 col-lg-offset-4"></div>
                     <a th:href="@{/user/create-order}" class="btn btn-success"><span
                             class="glyphicon glyphicon-shopping-cart"></span> Оформить заказ</a>
-                    <a href="#" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Очистить всю
+                    <a th:href="@{/user/cart/clean}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Очистить всю
                         корзину</a>
                 </div>
             </div>

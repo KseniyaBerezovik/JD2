@@ -27,7 +27,7 @@
                 </ul>
 
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="detail"
+                    <div role="tabpanel" th:class="${review eq true} ? 'tab-pane' : 'tab-pane active'" id="detail"
                          th:object="${product}">
                         <div class="row">
                             <div class="col-lg-6">
@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    <div role="tabpanel" class="tab-pane" id="reviews">
+                    <div role="tabpanel" th:class="${review eq true} ? 'tab-pane active' : 'tab-pane'" class="tab-pane" id="reviews">
                         <div class="row review">
                             <div class="col-lg-8 col-lg-offset-2">
                                 <div class="panel panel-default" th:each="review : ${reviews}">
@@ -82,7 +82,7 @@
                             <div class="btn-group btn-group-justified" role="group">
                                 <div class="btn-group btn-group-justified" role="group">
                                     <div class="btn-group" role="group">
-                                        <button type="submit" class="btn btn-default">Сохранить</button>
+                                        <button type="submit" class="btn btn-primary">Сохранить</button>
                                     </div>
                                 </div>
                             </div>

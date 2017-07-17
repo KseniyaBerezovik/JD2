@@ -39,15 +39,25 @@
             </div>
         </div>
 
-        <div th:if="${details}">
-            <div th:each="detail : ${details}">
-                <label th:text="${detail.name}"
-                       th:for="detailValue">
-                </label>
+        <div class="container">
+            <div class="col-lg-5 col-lg-offset-3">
+                <div th:if="${details}">
+                    <div th:each="detail : ${details}">
+                        <div class="form-group">
+                            <label th:text="${detail.name}"
+                                   th:for="detailValue">
+                            </label>
 
-                <input class="myDetail" type="text" th:name="${detail.name}" th:id="detailValue">
+                            <input class="myDetail form-control" type="text" th:name="${detail.name}" th:id="detailValue">
+                        </div>
+                    </div>
+                    <div class="btn-group btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <button type="button" onclick="getDetail()">Сохранить</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="button" onclick="getDetail()">Сохранить</button>
         </div>
     </div>
 </div>

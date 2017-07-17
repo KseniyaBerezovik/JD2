@@ -53,10 +53,10 @@ public class CartController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/cart")
-    public String cart() {
-        return "cart";
-    }
+//    @GetMapping("/cart")
+//    public String cart() {
+//        return "cart";
+//    }
 
     @GetMapping("/user/cart")
     public String userCart(Model model) {
@@ -69,6 +69,14 @@ public class CartController {
             model.addAttribute("carts", carts);
         }
         return "cart";
+    }
+
+    @GetMapping("/user/cart/clean")
+    public String cleanCart() {
+        String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.getByLogin(userLogin);
+        cartService.cleanByUser(user);
+        return "redirect:/user/cart";
     }
 
     @PostMapping("/user/cart/delete")

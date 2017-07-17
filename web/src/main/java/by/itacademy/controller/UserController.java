@@ -56,9 +56,13 @@ public class UserController {
     }
 
     @GetMapping("/create-order")
-    public String addOrder() {
+    public String addOrder(Model model) {
         String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getByLogin(userLogin);
+        Profile profile = profileService.getByUser(user);
+        if(profile != null) {
+            model.addAttribute("profile", profile);
+        }
         orderService.createOrder(user);
         return "order-success";
     }

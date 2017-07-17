@@ -12,10 +12,25 @@
 
         <div th:insert="~{fragments :: navbar-default}"></div>
 
-        <h4>Заказ успешно создан</h4>
+        <div class="col-lg-4 col-lg-offset-3">
+            <div th:if="${profile == null}">
+                <h4>Заказ успешно создан</h4>
+            </div>
 
-        <div class="btn-group" role="group">
-            <a class="btn btn-primary" th:href="@{/main_page}">На главную</a>
+            <div th:if="${profile != null}">
+                <h3 text="Ваш заказ успешно создан."></h3>
+                <h4 th:text="'Заказ будет выслан по адресу: '"></h4>
+                <h4 th:text="'Город ' + ${profile.address.city}"></h4>
+                <h4 th:text="'Улица ' + ${profile.address.street}"></h4>
+                <h4 th:text="'Дом ' + ${profile.address.house}"></h4>
+                <h4 th:text="'Квартира ' + ${profile.address.flat}"></h4>
+                <h4 th:text="'Контактный номер телефона: ' + ${profile.telephone}"></h4>
+                <h4 th:text="'Email: ' + ${profile.email}"></h4>
+            </div>
+
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" th:href="@{/main_page}">На главную</a>
+            </div>
         </div>
 
     </div>

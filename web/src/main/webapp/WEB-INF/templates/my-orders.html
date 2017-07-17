@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
 <head>
     <meta charset="UTF-8"/>
     <title>Orders</title>
@@ -12,16 +13,38 @@
 
         <div th:insert="~{fragments :: navbar-default}"></div>
 
-        <div th:if="${empty}">
-            <h3>У вас нет заказов</h3>
+        <div sec:authorize="${hasAuthority('USER')}">
+            <div th:if="${empty}" class="col-lg-4 col-lg-offset-3">
+                <h3>У вас нет заказов</h3>
+            </div>
+        </div>
+
+        <div sec:authorize="${hasAuthority('ADMIN')}">
+            <div th:if="${empty}" class="col-lg-4 col -lg-offset-3">
+                <h4>У пользователя нет заказов</h4>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary" th:href="@{/admin/users/get-all}">Назад</a>
+                </div>
+            </div>
         </div>
 
         <div th:unless="${empty}">
-            <h4>Мои заказы</h4>
             <div th:each="order : ${orders}">
                 <div th:each="content : ${contents}">
                     <div class="row" th:if="${order.id} == ${content[0].order.id}">
                         <div class="col-lg-8 col-lg-offset-2">
+                            <div sec:authorize="${hasAuthority('USER')}">
+                                <div th:if="${empty}">
+                                    <h3>Мои заказы</h3>
+                                </div>
+                            </div>
+
+                            <div sec:authorize="${hasAuthority('ADMIN')}">
+                                <div th:if="${empty}">
+                                    <h3 th:text="'Заказы пользователя ' + ${user.name} + ' ' + ${user.surname}"></h3>
+                                </div>
+                            </div>
+
                             <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                 <tr>
@@ -48,6 +71,13 @@
                     </div>
                 </div>
             </div>
+
+            <div sec:authorize="${hasAuthority('ADMIN')}">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary" th:href="@{/admin/users/get-all}">Назад</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

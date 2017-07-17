@@ -1,7 +1,9 @@
 package by.itacademy.controller;
 
+import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Product;
+import by.itacademy.service.CategoryService;
 import by.itacademy.service.CharacteristicService;
 import by.itacademy.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,14 @@ public class AdminChangeProductController {
 
     @Autowired
     private CharacteristicService characteristicService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @ModelAttribute("categories")
+    public List<Category> addCategories() {
+        return categoryService.findAll();
+    }
 
     @GetMapping("/change-product/{id}")
     public String getProduct(@PathVariable("id") Long productId,
