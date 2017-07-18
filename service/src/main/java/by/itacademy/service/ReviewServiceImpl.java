@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.dao.ReviewDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.entity.otherEntity.Review;
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.service.common.BaseServiceImpl;
@@ -36,5 +37,10 @@ public class ReviewServiceImpl extends BaseServiceImpl<Review> implements Review
         review.setProduct(productService.getByID(productID));
         review.setOwner(userService.getByID(userID));
         return review;
+    }
+
+    @Override
+    protected BaseDao<Review> getDao() {
+        return reviewDao;
     }
 }

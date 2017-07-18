@@ -41,13 +41,17 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
 
     @Override
     public Integer getNextImageNumber() {
-        Product product = getSessionFactory().getCurrentSession()
+        List<Product> products = getSessionFactory().getCurrentSession()
                 .createQuery("select p from Product p where p.image is not null order by p.id desc", Product.class)
                 .setMaxResults(1)
-                .getSingleResult();
-        String image = product.getImage();
-        String[] split = image.split("\\.");
-        return Integer.valueOf(split[0]) + 1;
+                .getResultList();
+        if(products.size() == 0) {
+            return 1;
+        } else {
+            String image = products.get(products.size() - 1).getImage();
+            String[] split = image.split("\\.");
+            return Integer.valueOf(split[0]) + 1;
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package by.itacademy.service;
 import by.itacademy.dao.OrderContentDao;
 import by.itacademy.dao.OrderDao;
 import by.itacademy.dao.OrderDetailDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.entity.orderEntity.*;
 import by.itacademy.entity.userEntity.User;
 import by.itacademy.service.common.BaseServiceImpl;
@@ -36,11 +37,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     }
 
     @Override
-    public List<Order> getByDate(LocalDateTime from, LocalDateTime to) {
-        return orderDao.getByDate(from, to);
-    }
-
-    @Override
     public Order createOrder(User user) {
         List<Cart> carts = cartService.getByUser(user);
         OrderDetail orderDetail = new OrderDetail(LocalDateTime.now(), null);
@@ -57,5 +53,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         contents.stream().forEach(c -> orderContentDao.save(c));
         cartService.cleanByUser(user);
         return order;
+    }
+
+    @Override
+    protected BaseDao<Order> getDao() {
+        return orderDao;
     }
 }

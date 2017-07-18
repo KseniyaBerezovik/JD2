@@ -57,7 +57,7 @@ public class DatabaseConfig {
     public LocalSessionFactoryBean sessionFactoryBean() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("by.itacademy.entity");
+        sessionFactory.setPackagesToScan("by.itacademy");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }

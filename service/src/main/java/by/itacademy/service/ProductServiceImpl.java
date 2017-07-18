@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.dao.ProductDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.dto.FilterDto;
 import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Product;
@@ -138,5 +139,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
 
     private void addOsValues(Map<Long, List<String>> resultMap, List<String> os){
         resultMap.put(3L, os);
+    }
+
+    @Override
+    protected BaseDao<Product> getDao() {
+        return productDao;
     }
 }

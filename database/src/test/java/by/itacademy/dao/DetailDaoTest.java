@@ -15,9 +15,6 @@ import javax.transaction.Transactional;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
-@Transactional
 public class DetailDaoTest extends BaseDaoTest<Detail> {
 
     @Autowired

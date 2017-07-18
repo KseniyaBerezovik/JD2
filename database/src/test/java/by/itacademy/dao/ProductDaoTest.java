@@ -3,7 +3,7 @@ package by.itacademy.dao;
 import by.itacademy.config.TestConfig;
 import by.itacademy.dao.common.BaseDao;
 import by.itacademy.dao.common.BaseDaoTest;
-import by.itacademy.entity.productEntity.Characteristic;
+import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
 import org.junit.Test;
@@ -13,16 +13,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
-@Transactional
 public class ProductDaoTest extends BaseDaoTest<Product> {
 
     @Autowired
@@ -32,7 +27,7 @@ public class ProductDaoTest extends BaseDaoTest<Product> {
     private DetailDao detailDao;
 
     @Autowired
-    private CharacteristicDao characteristicDao;
+    private CategoryDao categoryDao;
 
     @Override
     protected BaseDao<Product> getDao() {
@@ -45,7 +40,7 @@ public class ProductDaoTest extends BaseDaoTest<Product> {
     }
 
     @Test
-    public void testGetByCategoryName() {
+    public void testGetByCategoryNameTest() {
         getDataImporter().importData();
         List<Product> products = productDao.getByCategoryName("Мобильные телефоны", 1, 10);
 
@@ -53,22 +48,43 @@ public class ProductDaoTest extends BaseDaoTest<Product> {
         assertThat(products.get(0).getName(), is("Xiaomi Redmi 3"));
     }
 
-//    @Test
-//    public void testGetByCharacteristics() {
-//        getDataImporter().importData();
-//        Detail detail = detailDao.getByName("Год выпуска");
-//
-//        List<Characteristic> yearOfIssue = characteristicDao.getByDetailAndValue(detail, "2017");
-//        List<Product> products = productDao.getByCharacteristics(yearOfIssue);
-//        System.out.println("PRODUCTS : " + products);
-//
-//        List<String> productNames = new ArrayList<>();
-//
-//        for(Product product : products) {
-//            productNames.add(product.getName());
-//        }
-//
-//        assertThat(products, hasSize(1));
-//        assertThat(productNames, contains("Xiaomi Redmi 3"));
-//    }
+    @Test
+    public void getTotalPageTest() throws Exception {
+        getDataImporter().importData();
+        Category category = categoryDao.getByID(1L);
+        Integer page = productDao.getTotalPage(category, 1);
+        System.out.println("PAGE: " + page);
+        assertThat(page, is(1));
+    }
+
+    @Test
+    public void getNextImageNumberTest() throws Exception {
+        getDataImporter().importData();
+        Integer number = productDao.getNextImageNumber();
+        assertThat(number, is(3));
+    }
+
+    @Test
+    public void getWithFilterTest() throws Exception {
+        getDataImporter().importData();
+        List<String> list = Arrays.asList("Android");
+        Map<Long, List<String>> map = new HashMap<>();
+        Detail detail = detailDao.getByName("Операционная система");
+        detailDao.save(detail);
+        map.put(1L, list);
+        List<Long> productsIds = productDao.getWithFilter(map, 1, 10);
+        assertThat(productsIds, hasSize(0));
+    }
+
+    @Test
+    public void getTotalPageWithFilterTest() throws Exception {
+        getDataImporter().importData();
+        List<String> list = Arrays.asList("Android");
+        Map<Long, List<String>> map = new HashMap<>();
+        Detail detail = detailDao.getByName("Операционная система");
+        detailDao.save(detail);
+        map.put(1L, list);
+        Integer totalPageWithFilter = productDao.getTotalPageWithFilter(map, 10);
+        assertThat(totalPageWithFilter, is(0));
+    }
 }

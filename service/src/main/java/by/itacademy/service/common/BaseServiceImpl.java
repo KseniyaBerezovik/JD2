@@ -3,36 +3,38 @@ package by.itacademy.service.common;
 import by.itacademy.dao.common.BaseDao;
 import by.itacademy.entity.otherEntity.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>{
+@Transactional
+public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>{
 
-    @Autowired
-    private BaseDao<T> baseDao;
+    protected abstract BaseDao<T> getDao();
 
     @Override
     public Long save(T entity) {
-        return baseDao.save(entity);
+        return getDao().save(entity);
     }
 
     @Override
     public T getByID(Long id) {
-        return baseDao.getByID(id);
+        return getDao().getByID(id);
     }
 
     @Override
     public void update(T entity) {
-        baseDao.update(entity);
+        getDao().update(entity);
     }
 
     @Override
     public void delete(T entity) {
-        baseDao.delete(entity);
+        getDao().delete(entity);
     }
 
     @Override
     public List<T> findAll() {
-        return baseDao.findAll();
+        return getDao().findAll();
     }
 }

@@ -1,10 +1,12 @@
 package by.itacademy.service;
 
 import by.itacademy.dao.CartDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.dao.common.BaseDaoImpl;
 import by.itacademy.entity.orderEntity.Cart;
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.entity.userEntity.User;
+import by.itacademy.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CartServiceImpl extends BaseDaoImpl<Cart> implements CartService {
+public class CartServiceImpl extends BaseServiceImpl<Cart> implements CartService {
 
     @Autowired
     private CartDao cartDao;
@@ -68,5 +70,10 @@ public class CartServiceImpl extends BaseDaoImpl<Cart> implements CartService {
     @Override
     public void cleanByUser(User user) {
         cartDao.cleanByUser(user);
+    }
+
+    @Override
+    protected BaseDao<Cart> getDao() {
+        return cartDao;
     }
 }

@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.dao.CategoryDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.entity.productEntity.Category;
 import by.itacademy.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category> implements Ca
     private CategoryDao categoryDao;
 
     @Override
-    public Category getByName(String name) {
-        return categoryDao.getByName(name);
+    protected BaseDao<Category> getDao() {
+        return categoryDao;
     }
 }

@@ -4,5 +4,4 @@ import by.itacademy.entity.productEntity.Category;
 import by.itacademy.service.common.BaseService;
 
 public interface CategoryService extends BaseService<Category> {
-    Category getByName(String name);
 }

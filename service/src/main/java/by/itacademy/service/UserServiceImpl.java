@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.dao.UserDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.entity.userEntity.User;
 import by.itacademy.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
     @Autowired
     private PasswordEncoder encoder;
+
+    @Override
+    protected BaseDao<User> getDao() {
+        return userDao;
+    }
 
     @Override
     public Long save(User user) {

@@ -16,5 +16,4 @@ public interface ProductDao extends BaseDao<Product> {
     Integer getNextImageNumber();
     List<Long> getWithFilter(Map<Long, List<String>> detailValueMap, int pageNumber, int countProductInPage);
     Integer getTotalPageWithFilter(Map<Long, List<String>> detailValueMap, int countProductInPage);
-
 }

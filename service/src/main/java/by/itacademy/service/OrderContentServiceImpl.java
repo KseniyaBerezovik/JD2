@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.dao.OrderContentDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.entity.orderEntity.Order;
 import by.itacademy.entity.orderEntity.OrderContent;
 import by.itacademy.service.common.BaseServiceImpl;
@@ -20,5 +21,10 @@ public class OrderContentServiceImpl extends BaseServiceImpl<OrderContent> imple
     @Override
     public List<OrderContent> getByOrder(Order order) {
         return orderContentDao.getByOrder(order);
+    }
+
+    @Override
+    protected BaseDao<OrderContent> getDao() {
+        return orderContentDao;
     }
 }

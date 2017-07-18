@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.dao.CharacteristicDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
@@ -23,17 +24,7 @@ public class CharacteristicServiceImpl extends BaseServiceImpl<Characteristic> i
     }
 
     @Override
-    public List<Characteristic> getByDetailAndIntervalValues(Detail detail, String from, String to) {
-        return characteristicDao.getByDetailAndIntervalValues(detail, from, to);
-    }
-
-    @Override
-    public List<Characteristic> getByDetailAndValue(Detail detail, String value) {
-        return characteristicDao.getByDetailAndValue(detail, value);
-    }
-
-    @Override
-    public List<Characteristic> getByDetailAndValueList(Detail detail, List<String> values) {
-        return characteristicDao.getByDetailAndValueList(detail, values);
+    protected BaseDao<Characteristic> getDao() {
+        return characteristicDao;
     }
 }

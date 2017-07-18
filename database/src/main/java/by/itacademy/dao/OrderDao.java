@@ -9,5 +9,4 @@ import java.util.List;
 
 public interface OrderDao extends BaseDao<Order> {
     List<Order> getByUser(User owner);
-    List<Order> getByDate(LocalDateTime from, LocalDateTime to);
 }

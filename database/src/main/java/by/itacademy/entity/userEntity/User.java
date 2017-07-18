@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class User extends BaseEntity {
 
     @Column(name = "user")
-    @NotEmpty(message = "movie.validation.error.name.not_empty")
+    @NotEmpty(message = "user.validation.name.not_empty")
     private String name;
 
     @Column(name = "surname")

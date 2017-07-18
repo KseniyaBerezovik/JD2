@@ -8,12 +8,6 @@ import java.util.List;
 
 @Repository
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
-
-    @Override
-    public List<User> getAllClients() {
-        return getSessionFactory().getCurrentSession().createQuery("from User", User.class).getResultList();
-    }
-
     @Override
     public User getByLogin(String login) {
         List<User> users = getSessionFactory().getCurrentSession()

@@ -1,24 +1,38 @@
 package by.itacademy.dao.common;
 
+import by.itacademy.config.TestConfig;
 import by.itacademy.entity.otherEntity.BaseEntity;
 import by.itacademy.util.DataImporter;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class BaseDaoTest<T extends BaseEntity> {
 
     protected abstract BaseDao<T> getDao();
     protected abstract T getModel();
 
-    @Autowired
     private DataImporter dataImporter;
 
-    protected DataImporter getDataImporter() {
+    @Autowired
+    public void setDataImporter(DataImporter dataImporter) {
+        this.dataImporter = dataImporter;
+    }
+
+    public DataImporter getDataImporter() {
         return dataImporter;
     }
 

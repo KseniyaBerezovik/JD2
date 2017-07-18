@@ -1,6 +1,8 @@
 package by.itacademy.util;
 
+import by.itacademy.entity.orderEntity.Cart;
 import by.itacademy.entity.orderEntity.Order;
+import by.itacademy.entity.orderEntity.OrderContent;
 import by.itacademy.entity.orderEntity.OrderDetail;
 import by.itacademy.entity.otherEntity.Address;
 import by.itacademy.entity.otherEntity.Review;
@@ -8,6 +10,8 @@ import by.itacademy.entity.productEntity.Category;
 import by.itacademy.entity.productEntity.Characteristic;
 import by.itacademy.entity.productEntity.Detail;
 import by.itacademy.entity.productEntity.Product;
+import by.itacademy.entity.userEntity.Gender;
+import by.itacademy.entity.userEntity.Profile;
 import by.itacademy.entity.userEntity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -43,13 +47,19 @@ public class DataImporterImpl implements DataImporter {
                 "Xiaomi Redmi 3",
                 "xiaomi description",
                 360d,
-                mobilePhone);
+                mobilePhone,
+                "1.jpg");
 
         Product samsungTv = saveProduct(session,
                 "TV Samsung",
                 "samsung description",
                 520d,
-                tv);
+                tv,
+                "2.jpg");
+
+        User user = saveUser(session);
+
+        Order order = saveOrder(session, user);
 
         saveCharacteristic(session, xiaomi, yearOfIssue, "2017");
         saveCharacteristic(session, xiaomi, country, "Китай");
@@ -59,10 +69,27 @@ public class DataImporterImpl implements DataImporter {
         saveCharacteristic(session, samsungTv, yearOfIssue, "2016");
         saveCharacteristic(session, samsungTv, country, "Австрия");
 
-        User client = saveUser(session);
+        saveReview(session, user, xiaomi);
+        saveOrder(session, user);
 
-        saveReview(session, client, xiaomi);
-        saveOrder(session, client);
+        saveCart(session, user, samsungTv, 2);
+        saveCart(session, user, xiaomi, 2);
+
+        OrderContent orderContent = saveOrderContent(session, order, xiaomi);
+        Profile profile = saveProfile(session, user);
+
+    }
+
+    private Profile saveProfile(Session session, User user) {
+        Address address = new Address("Minsk", "Lenina", "6a", "13");
+        Profile profile = new Profile("120", Gender.FEMALE, address, "em@gmail.com", user);
+        session.save(profile);
+        return profile;
+    }
+
+    private void saveCart(Session session, User user, Product product, Integer amount) {
+        Cart cart = new Cart(user, product, amount);
+        session.save(cart);
     }
 
     private void saveCharacteristic(Session session,  Product product, Detail detail, String value) {
@@ -73,12 +100,13 @@ public class DataImporterImpl implements DataImporter {
         session.save(characteristic);
     }
 
-    private Product saveProduct(Session session, String name, String description, Double price, Category category) {
+    private Product saveProduct(Session session, String name, String description, Double price, Category category, String image) {
         Product product = new Product();
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
         product.setCategory(category);
+        product.setImage(image);
         session.save(product);
         return product;
     }
@@ -109,13 +137,14 @@ public class DataImporterImpl implements DataImporter {
         user.setSurname("Ivanov");
         user.setLogin("mivan");
         user.setPassword("1111");
-
-        Address address = new Address();
-        address.setCity("Minsk");
-
-        user.setAddress(address);
         session.save(user);
         return user;
+    }
+
+    private OrderContent saveOrderContent(Session session, Order order, Product product) {
+        OrderContent orderContent = new OrderContent(product, 2, order);
+        session.save(orderContent);
+        return orderContent;
     }
 
     private Order saveOrder(Session session, User user) {

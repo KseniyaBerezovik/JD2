@@ -18,9 +18,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
-@Transactional
 public class ReviewDaoTest extends BaseDaoTest<Review> {
 
     @Autowired

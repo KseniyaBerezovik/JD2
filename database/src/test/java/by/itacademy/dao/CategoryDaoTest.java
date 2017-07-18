@@ -15,9 +15,6 @@ import javax.transaction.Transactional;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
-@Transactional
 public class CategoryDaoTest extends BaseDaoTest<Category> {
 
     @Autowired
@@ -31,12 +28,5 @@ public class CategoryDaoTest extends BaseDaoTest<Category> {
     @Override
     protected Category getModel() {
         return new Category();
-    }
-
-    @Test
-    public void getByName() {
-        getDataImporter().importData();
-        Category category = dao.getByName("Мобильные телефоны");
-        assertThat(category.getName(), is("Мобильные телефоны"));
     }
 }

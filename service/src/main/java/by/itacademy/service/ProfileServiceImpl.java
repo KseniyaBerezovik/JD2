@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.dao.ProfileDao;
+import by.itacademy.dao.common.BaseDao;
 import by.itacademy.entity.userEntity.Profile;
 import by.itacademy.entity.userEntity.User;
 import by.itacademy.service.common.BaseServiceImpl;
@@ -18,5 +19,10 @@ public class ProfileServiceImpl extends BaseServiceImpl<Profile> implements Prof
     @Override
     public Profile getByUser(User user) {
         return profileDao.getByUser(user);
+    }
+
+    @Override
+    protected BaseDao<Profile> getDao() {
+        return profileDao;
     }
 }

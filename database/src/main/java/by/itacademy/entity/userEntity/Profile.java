@@ -2,13 +2,17 @@ package by.itacademy.entity.userEntity;
 
 import by.itacademy.entity.otherEntity.Address;
 import by.itacademy.entity.otherEntity.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "profiles")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Profile extends BaseEntity {
     @Column(name = "telephone")
     private String telephone;
