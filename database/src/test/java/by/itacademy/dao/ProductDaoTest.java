@@ -72,7 +72,7 @@ public class ProductDaoTest extends BaseDaoTest<Product> {
         Detail detail = detailDao.getByName("Операционная система");
         detailDao.save(detail);
         map.put(1L, list);
-        List<Long> productsIds = productDao.getWithFilter(map, 1, 10);
+        List<Long> productsIds = productDao.getWithFilter(map, 1L, 1, 10);
         assertThat(productsIds, hasSize(0));
     }
 
@@ -84,7 +84,7 @@ public class ProductDaoTest extends BaseDaoTest<Product> {
         Detail detail = detailDao.getByName("Операционная система");
         detailDao.save(detail);
         map.put(1L, list);
-        Integer totalPageWithFilter = productDao.getTotalPageWithFilter(map, 10);
+        Integer totalPageWithFilter = productDao.getTotalPageWithFilter(map, 1L, 10);
         assertThat(totalPageWithFilter, is(0));
     }
 }

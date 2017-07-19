@@ -5,16 +5,22 @@ import by.itacademy.entity.orderEntity.Order;
 import by.itacademy.entity.orderEntity.OrderContent;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
 public class OrderContentDaoImpl extends BaseDaoImpl<OrderContent> implements OrderContentDao {
     @Override
     public List<OrderContent> getByOrder(Order order) {
-        List<OrderContent> contents = getSessionFactory().getCurrentSession()
-                .createQuery("select oc from OrderContent  oc where oc.order.id=:id", OrderContent.class)
-                .setParameter("id", order.getId())
-                .getResultList();
-        return contents;
+        CriteriaBuilder cb = getSessionFactory().getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<OrderContent> criteria = cb.createQuery(OrderContent.class);
+        Root<OrderContent> orderContent = criteria.from(OrderContent.class);
+        Path<Object> orderPath = orderContent.get("order");
+        criteria.select(orderContent)
+                .where(cb.equal(orderPath.get("id"), order.getId()));
+        return getSessionFactory().getCurrentSession().createQuery(criteria).getResultList();
     }
 }

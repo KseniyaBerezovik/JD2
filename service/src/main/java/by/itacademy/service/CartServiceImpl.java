@@ -2,11 +2,11 @@ package by.itacademy.service;
 
 import by.itacademy.dao.CartDao;
 import by.itacademy.dao.common.BaseDao;
-import by.itacademy.dao.common.BaseDaoImpl;
 import by.itacademy.entity.orderEntity.Cart;
 import by.itacademy.entity.productEntity.Product;
 import by.itacademy.entity.userEntity.User;
 import by.itacademy.service.common.BaseServiceImpl;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@Log4j
 public class CartServiceImpl extends BaseServiceImpl<Cart> implements CartService {
 
     @Autowired

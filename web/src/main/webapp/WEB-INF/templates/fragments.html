@@ -11,7 +11,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" th:href="@{/main_page}">Home page</a>
+                    <a class="navbar-brand" th:href="@{/main_page}" th:text="#{home_page}">Home page</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -49,9 +49,9 @@
                                th:text="${#authentication.getPrincipal().getUsername()}"><span
                                     class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="/logout">Logout</a></li>
-                                <li><a href="/user/profile">Profile</a></li>
-                                <li><a href="/user/my-orders">My orders</a></li>
+                                <li><a th:href="@{/logout}">Logout</a></li>
+                                <li><a th:href="@{/user/profile}">Profile</a></li>
+                                <li><a th:href="@{/user/my-orders}">My orders</a></li>
                             </ul>
                         </li>
 
@@ -104,6 +104,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" th:href="@{/resources/css/style.css}">
-        <script src="/resources/js/functions.js"></script>
+        <script src="/web/resources/js/functions.js"></script>
     </div>
 </head>

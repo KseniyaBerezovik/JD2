@@ -65,6 +65,7 @@ public class ProductController {
                                         @RequestParam(value = "priceFrom", required = false) String priceFrom,
                                         @RequestParam(value = "priceTo", required = false) String priceTo,
                                         @RequestParam(value = "os", required = false) List<String> os,
+                                        @RequestParam(value = "producer", required = false) List<String> producers,
                                         @RequestParam(value = "page", defaultValue = "1", required = false) Integer pageNumber,
                                         Model model) {
         Category category = categoryService.getByID(id);
@@ -73,11 +74,12 @@ public class ProductController {
         model.addAttribute("details", details);
 
         boolean allParamsUndefined = years == null &&
-                                    yearFrom == null &&
-                                    yearTo == null &&
-                                    priceFrom == null &&
-                                    priceTo == null &&
-                                    os == null;
+                yearFrom == null &&
+                yearTo == null &&
+                priceFrom == null &&
+                priceTo == null &&
+                os == null &&
+                producers == null;
 
         List<Product> products;
 
@@ -86,7 +88,15 @@ public class ProductController {
             model.addAttribute("totalPage", productService.getTotalPage(category));
             model.addAttribute("currentPage", pageNumber);
         } else {
-            FilterDto filterDto = new FilterDto(years, yearFrom, yearTo, priceFrom, priceTo, os);
+            FilterDto filterDto = new FilterDto(
+                    category,
+                    years,
+                    yearFrom,
+                    yearTo,
+                    priceFrom,
+                    priceTo,
+                    os,
+                    producers);
             products = productService.getByFilter(filterDto, pageNumber);
             int totalPage = productService.getTotalPageWithFilter(filterDto);
             model.addAttribute("totalPage", totalPage);

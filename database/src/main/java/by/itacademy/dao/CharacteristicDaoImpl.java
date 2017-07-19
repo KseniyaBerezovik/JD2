@@ -7,6 +7,10 @@ import by.itacademy.entity.productEntity.Product;
 import org.springframework.stereotype.Repository;
 import sun.awt.SunHints;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +18,12 @@ import java.util.Map;
 public class CharacteristicDaoImpl extends BaseDaoImpl<Characteristic> implements CharacteristicDao {
     @Override
     public List<Characteristic> getByProduct(Product product) {
-        List<Characteristic> characteristics = getSessionFactory().getCurrentSession()
-                .createQuery("select c from Characteristic c where c.product.id=:id", Characteristic.class)
-                .setParameter("id", product.getId())
-                .getResultList();
-        return characteristics;
+        CriteriaBuilder cb = getSessionFactory().getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Characteristic> criteria = cb.createQuery(Characteristic.class);
+        Root<Characteristic> characteristic = criteria.from(Characteristic.class);
+        Path<Object> productPath = characteristic.get("product");
+        criteria.select(characteristic)
+                .where(cb.equal(productPath.get("id"), product.getId()));
+        return getSessionFactory().getCurrentSession().createQuery(criteria).getResultList();
     }
 }

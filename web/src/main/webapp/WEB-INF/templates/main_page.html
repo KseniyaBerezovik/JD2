@@ -159,7 +159,7 @@
                                             <div th:value="${product.id}" th:id="'productId' + ${product.id}"></div>
                                             <a class="btn btn-default"
                                                type="button"
-                                               th:href="'/admin/change-product/' + ${product.id} + '/'">
+                                               th:href="@{'/admin/change-product/' + ${product.id} + '/'}">
                                                 Изменить
                                             </a>
                                         </div>

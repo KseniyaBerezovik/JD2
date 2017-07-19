@@ -19,22 +19,17 @@ import java.util.stream.Collectors;
 @Transactional
 public class ProductServiceImpl extends BaseServiceImpl<Product> implements ProductService  {
 
-    private static Logger LOGGER = Logger.getLogger(ProductService.class);
-
     private static int countProductsInPage = 3;
 
-    @Autowired
     private ProductDao productDao;
 
     @Autowired
-    private DetailService detailService;
-
-    @Autowired
-    private CharacteristicService characteristicService;
+    public ProductServiceImpl(ProductDao productDao) {
+        this.productDao = productDao;
+    }
 
     @Override
     public List<Product> getByCategoryName(String name, int pageNumber) {
-        LOGGER.info("invocation: getByCategoryName parameters: " + name);
         return productDao.getByCategoryName(name, pageNumber, countProductsInPage);
     }
 
@@ -59,6 +54,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
             addOsValues(detailIdValueMap, filterDto.getOs());
         }
 
+        if(filterDto.getProducers() != null) {
+            addProducersValues(detailIdValueMap, filterDto.getProducers());
+        }
+
         if(isPriceParamsPresent(filterDto)) {
             addPriceParams(detailIdValueMap, filterDto.getPriceFrom(), filterDto.getPriceTo());
         }
@@ -69,7 +68,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     @Override
     public List<Product> getByFilter(FilterDto filterDto, int pageNumber) {
 
-        List<Product> resultProducts = productDao.getWithFilter(getDetailIdValueMap(filterDto), pageNumber, countProductsInPage)
+        List<Product> resultProducts = productDao.getWithFilter(getDetailIdValueMap(filterDto), filterDto.getCategory().getId(), pageNumber, countProductsInPage)
                 .stream()
                 .map(i -> productDao.getByID(i))
                 .collect(Collectors.toList());
@@ -79,7 +78,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
 
     @Override
     public Integer getTotalPageWithFilter(FilterDto filterDto) {
-        return productDao.getTotalPageWithFilter(getDetailIdValueMap(filterDto), countProductsInPage);
+        return productDao.getTotalPageWithFilter(getDetailIdValueMap(filterDto), filterDto.getCategory().getId(), countProductsInPage);
     }
 
     private void addPriceParams(Map<Long, List<String>> detailIdValueMap, String priceFrom, String priceTo) {
@@ -107,9 +106,9 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         List<String> resultYears = new ArrayList<>();
         if(years != null) {
             resultYears.addAll(years
-                        .stream()
-                        .map(year -> String.valueOf(year))
-                        .collect(Collectors.toList()));
+                    .stream()
+                    .map(year -> String.valueOf(year))
+                    .collect(Collectors.toList()));
         }
 
         if(yearFrom == null && yearTo == null) {
@@ -133,12 +132,16 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         }
 
         if(years != null || yearFrom != null || yearTo != null) {
-            resultMap.put(1L, resultYears); //TODO:DETAIL ID
+            resultMap.put(1L, resultYears);
         }
     }
 
     private void addOsValues(Map<Long, List<String>> resultMap, List<String> os){
         resultMap.put(3L, os);
+    }
+
+    private void addProducersValues(Map<Long, List<String>> resultMap, List<String> producers) {
+        resultMap.put(5L, producers);
     }
 
     @Override

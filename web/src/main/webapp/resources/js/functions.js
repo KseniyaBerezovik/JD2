@@ -1,7 +1,7 @@
 function getDetail() {
     var details = document.getElementsByClassName("myDetail");
     for (var i = 0; i < details.length; i++) {
-        $.ajax("/admin/add-product/add-details", {
+        $.ajax("/web/admin/add-product/add-details", {
             method: "POST",
             contentType: "application/json",
             data: JSON.stringify({
@@ -10,7 +10,7 @@ function getDetail() {
             })
         })
     }
-    window.location.href = "/admin/add-product/third";
+    window.location.href = "/web/admin/add-product/third";
 }
 
 function deleteFromCart(id) {
@@ -19,7 +19,7 @@ function deleteFromCart(id) {
     console.log(productId);
     console.log(amount);
 
-    $.ajax("/user/cart/delete", {
+    $.ajax("/web/user/cart/delete", {
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify({
@@ -28,7 +28,7 @@ function deleteFromCart(id) {
         })
     }).done (function redirect(amount) {
         $("#amountProductsInCart").text(amount.amount);
-        window.location.href = "/user/cart/";
+        window.location.href = "/web/user/cart/";
     })
 }
 
@@ -38,7 +38,7 @@ function addToCart(id) {
     console.log(productId);
     console.log(amount);
 
-    $.ajax("/user/cart/add", {
+    $.ajax("/web/user/cart/add", {
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify({

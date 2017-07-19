@@ -23,8 +23,6 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
                 .setFirstResult(countProductInPage * ((pageNumber - 2) + 1))
                 .setMaxResults(countProductInPage)
                 .getResultList();
-        System.out.println("PRODUCTS: ");
-        products.forEach(System.out::println);
         return products;
     }
 
@@ -55,14 +53,18 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
     }
 
     @Override
-    public List<Long> getWithFilter(Map<Long, List<String>> detailValueMap, int pageNumber, int countProductInPage) {
+    public List<Long> getWithFilter(Map<Long, List<String>> detailValueMap, Long categoryId, int pageNumber, int countProductInPage) {
 
         StringBuilder nativeQuery = new StringBuilder("select p.id as id from products p " +
                 "LEFT JOIN characteristics c1 ON p.id=c1.product_id AND c1.detail_id=1 " +
                 "LEFT JOIN characteristics c2 ON p.id=c2.product_id AND c2.detail_id=2 " +
                 "LEFT JOIN characteristics c3 ON p.id=c3.product_id AND c3.detail_id=3 " +
                 "LEFT JOIN characteristics c4 ON p.id=c4.product_id AND c4.detail_id=4 " +
+                "LEFT JOIN characteristics c5 ON p.id=c5.product_id AND c5.detail_id=5 " +
                 "WHERE ");
+        nativeQuery.append("p.category_id = ");
+        nativeQuery.append(String.valueOf(categoryId));
+        nativeQuery.append(" AND ");
 
         List<String> forAddingToQuery = new ArrayList<>();
         for(Map.Entry<Long, List<String>> entry : detailValueMap.entrySet()) {
@@ -88,8 +90,6 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
         String fullNativeQuery = nativeQuery + toAdding +
                 " LIMIT " + countProductInPage + " OFFSET "  + countProductInPage * ((pageNumber - 2) + 1);
 
-        System.out.println("QUERY: " + fullNativeQuery);
-
         NativeQuery query = getSessionFactory().getCurrentSession().createNativeQuery(fullNativeQuery);
 
         if(detailValueMap.containsKey(1L)) {
@@ -98,13 +98,16 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
         if(detailValueMap.containsKey(3L)) {
             query.setParameter(3, detailValueMap.get(3L));
         }
+        if(detailValueMap.containsKey(5L)) {
+            query.setParameter(5, detailValueMap.get(5L));
+        }
 
         return (List<Long>) query.list().stream().map(i -> Long.valueOf(Objects.toString(i))).collect(Collectors.toList());
     }
 
     @Override
-    public Integer getTotalPageWithFilter(Map<Long, List<String>> detailValueMap, int countProductInPage) {
-        int productCount = getWithFilter(detailValueMap, 1, 100).size();
+    public Integer getTotalPageWithFilter(Map<Long, List<String>> detailValueMap, Long categoryId, int countProductInPage) {
+        int productCount = getWithFilter(detailValueMap, categoryId, 1, 100).size();
         return productCount % countProductInPage == 0 ? productCount / countProductInPage : productCount / countProductInPage + 1;
     }
 }

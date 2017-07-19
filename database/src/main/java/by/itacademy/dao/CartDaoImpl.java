@@ -6,6 +6,10 @@ import by.itacademy.entity.productEntity.Product;
 import by.itacademy.entity.userEntity.User;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -13,11 +17,13 @@ public class CartDaoImpl extends BaseDaoImpl<Cart> implements CartDao {
 
     @Override
     public List<Cart> getByUser(User user) {
-        List<Cart> carts = getSessionFactory().getCurrentSession()
-                .createQuery("select c from Cart c where c.owner.id=:id", Cart.class)
-                .setParameter("id", user.getId())
-                .getResultList();
-        return carts;
+        CriteriaBuilder cb = getSessionFactory().getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Cart> criteria = cb.createQuery(Cart.class);
+        Root<Cart> cart = criteria.from(Cart.class);
+        Path<Object> owner = cart.get("owner");
+        criteria.select(cart)
+                .where(cb.equal(owner.get("id"), user.getId()));
+        return getSessionFactory().getCurrentSession().createQuery(criteria).getResultList();
     }
 
     @Override
